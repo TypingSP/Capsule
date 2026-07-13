@@ -1,2 +1,140 @@
---[Typing独家luau混淆]
-(function() local _0xfaf6286e=139 local _0x6ee65c35=21 local _0xc4bd25d3=_0xfaf6286e+_0x6ee65c35 local _0xccee3bfc=_0xfaf6286e*_0x6ee65c35 if _0xc4bd25d3>500 then _0xc4bd25d3=_0xc4bd25d3-500 end if _0xccee3bfc<1000 then _0xccee3bfc=_0xccee3bfc+1000 end local _0x170cec6d=117 local _0x7aeffe37=57 local _0x4eaaaa36=_0x170cec6d+_0x7aeffe37 local _0x6ef7073c=_0x170cec6d*_0x7aeffe37 if _0x4eaaaa36>500 then _0x4eaaaa36=_0x4eaaaa36-500 end if _0x6ef7073c<1000 then _0x6ef7073c=_0x6ef7073c+1000 end local _0x44899a20=71 local _0xf6db5a00=34 local _0x51725ead=_0x44899a20+_0xf6db5a00 local _0xbfeb95d6=_0x44899a20*_0xf6db5a00 if _0x51725ead>500 then _0x51725ead=_0x51725ead-500 end if _0xbfeb95d6<1000 then _0xbfeb95d6=_0xbfeb95d6+1000 end local _0xf2d17008=95 local _0xb27ae539=87 local _0x765f69a1=_0xf2d17008+_0xb27ae539 local _0xdfe631ec=_0xf2d17008*_0xb27ae539 if _0x765f69a1>500 then _0x765f69a1=_0x765f69a1-500 end if _0xdfe631ec<1000 then _0xdfe631ec=_0xdfe631ec+1000 end local _0xb60e69b5=24 local _0xd5d0933c=99 local _0x37b5aa0e=_0xb60e69b5+_0xd5d0933c local _0x2b68f557=_0xb60e69b5*_0xd5d0933c if _0x37b5aa0e>500 then _0x37b5aa0e=_0x37b5aa0e-500 end if _0x2b68f557<1000 then _0x2b68f557=_0x2b68f557+1000 end local _0xfded0ebb=59 local _0x93ceabea=37 local _0xb003fb96=_0xfded0ebb+_0x93ceabea local _0x7286719c=_0xfded0ebb*_0x93ceabea if _0xb003fb96>500 then _0xb003fb96=_0xb003fb96-500 end if _0x7286719c<1000 then _0x7286719c=_0x7286719c+1000 end local _0x10c3333e=96 local _0x6121430d=71 local _0x17c4ef7c=_0x10c3333e+_0x6121430d local _0x01160f73=_0x10c3333e*_0x6121430d if _0x17c4ef7c>500 then _0x17c4ef7c=_0x17c4ef7c-500 end if _0x01160f73<1000 then _0x01160f73=_0x01160f73+1000 end local _0x3275cf1f=163 local _0x27192369=83 local _0xd1247cf3=_0x3275cf1f+_0x27192369 local _0x2aa4bcaf=_0x3275cf1f*_0x27192369 if _0xd1247cf3>500 then _0xd1247cf3=_0xd1247cf3-500 end if _0x2aa4bcaf<1000 then _0x2aa4bcaf=_0x2aa4bcaf+1000 end local _0x3ebc76e3=196 local _0xc12dfea2=64 local _0x1abf8c8d=_0x3ebc76e3+_0xc12dfea2 local _0xaf9711a0=_0x3ebc76e3*_0xc12dfea2 if _0x1abf8c8d>500 then _0x1abf8c8d=_0x1abf8c8d-500 end if _0xaf9711a0<1000 then _0xaf9711a0=_0xaf9711a0+1000 end local _0x74724943=171 local _0x9bf6ea57=92 local _0x3148105f=_0x74724943+_0x9bf6ea57 local _0x7ba76dae=_0x74724943*_0x9bf6ea57 if _0x3148105f>500 then _0x3148105f=_0x3148105f-500 end if _0x7ba76dae<1000 then _0x7ba76dae=_0x7ba76dae+1000 end local _0x57e25fd9=36 local _0x195fc75e=6 local _0x202882cc=_0x57e25fd9+_0x195fc75e local _0xc221004c=_0x57e25fd9*_0x195fc75e if _0x202882cc>500 then _0x202882cc=_0x202882cc-500 end if _0xc221004c<1000 then _0xc221004c=_0xc221004c+1000 end local _0x2a0a2781=114 local _0xe915a1db=47 local _0xfa0a8eca=_0x2a0a2781+_0xe915a1db local _0x4180f18b=_0x2a0a2781*_0xe915a1db if _0xfa0a8eca>500 then _0xfa0a8eca=_0xfa0a8eca-500 end if _0x4180f18b<1000 then _0x4180f18b=_0x4180f18b+1000 end local _0xfb2690c2=20 local _0xa0e95d93=15 local _0x1dd60725=7 local _0xa7e1d2a6=17 local _0xc5f92ff6=33 local _0x7e7c89b5=91 local _0xe8c5877c=bit32.band((_0xfb2690c2*_0x1dd60725)+_0xa0e95d93,0xFF) local _0x5ee6390b=bit32.band((_0xa7e1d2a6*_0xc5f92ff6)+_0xa0e95d93,0xFF) local _0xa743ba8d=bit32.band((_0x7e7c89b5*_0x1dd60725)-_0xfb2690c2,0xFF) if _0x5ee6390b>200 then _0x5ee6390b=_0x5ee6390b-100 end if _0xa743ba8d<50 then _0xa743ba8d=_0xa743ba8d+100 end local _0x630e7ac9={} _0x630e7ac9[1]="f7f4f8faf7bbcbf7fae2fee9e8bba6bbfcfaf6fea1dcfeefc8fee9edf2f8feb3b9cbf7fae2fee9e8" _0x630e7ac9[2]="b9b291f7f4f8faf7bbcbf7fae2fee9bba6bbcbf7fae2fee9e8b5d7f4f8faf7cbf7fae2fee991f7f4" _0x630e7ac9[3]="f8faf7bbcfecfefef5c8fee9edf2f8febba6bbfcfaf6fea1dcfeefc8fee9edf2f8feb3b9cfecfefe" _0x630e7ac9[4]="f5c8fee9edf2f8feb9b29191b6b6bb720329721c167e3f1691f2fdbbfcfaf6feb5d8f4e9fedceef2" _0x630e7ac9[5]="a1ddf2f5ffddf2e9e8efd8f3f2f7ffb3b9c8f2f6ebf7fed7f4fafffee9b9b2bbeff3fef5bbe9feef" _0x630e7ac9[6]="eee9f5bbfef5ff9191f7f4f8faf7bbc8f8e9fefef5dceef2bba6bbd2f5e8effaf5f8feb5f5feecb3" _0x630e7ac9[7]="b9c8f8e9fefef5dceef2b9b291c8f8e9fefef5dceef2b5d5faf6febba6bbb9c8f2f6ebf7fed7f4fa" _0x630e7ac9[8]="fffee9b991c8f8e9fefef5dceef2b5c9fee8feefd4f5c8ebfaecf5bba6bbfdfaf7e8fe91c8f8e9fe" _0x630e7ac9[9]="fef5dceef2b5cbfae9fef5efbba6bbfcfaf6feb5d8f4e9fedceef29191b6b6bb7f23207d3a1d7427" _0x630e7ac9[10]="137d340f7f25107f23167e140374271291f7f4f8faf7bbd6faf2f5dde9faf6febba6bbd2f5e8effa" _0x630e7ac9[11]="f5f8feb5f5feecb3b9dde9faf6feb9b291d6faf2f5dde9faf6feb5c8f2e1febba6bbcedff2f6a9b5" _0x630e7ac9[12]="f5feecb3abb7bba8a3abb7bbabb7bba9afabb291d6faf2f5dde9faf6feb5cbf4e8f2eff2f4f5bba6" _0x630e7ac9[13]="bbcedff2f6a9b5f5feecb3abb7bbb6afababb7bbabb5aeb7bbb6aaa9abb291d6faf2f5dde9faf6fe" _0x630e7ac9[14]="b5d9faf8f0fce9f4eef5ffd8f4f7f4e9a8bba6bbd8f4f7f4e9a8b5fde9f4f6c9dcd9b3abb7bbabb7" _0x630e7ac9[15]="bba9abb291d6faf2f5dde9faf6feb5daf8eff2edfebba6bbfdfaf7e8fe91d6faf2f5dde9faf6feb5" _0x630e7ac9[16]="dfe9fafcfcfaf9f7febba6bbfdfaf7e8fe91d6faf2f5dde9faf6feb5cbfae9fef5efbba6bbc8f8e9" _0x630e7ac9[17]="fefef5dceef29191f7f4f8faf7bbd6faf2f5d8f4e9f5fee9bba6bbd2f5e8effaf5f8feb5f5feecb3" _0x630e7ac9[18]="b9ced2d8f4e9f5fee9b9b291d6faf2f5d8f4e9f5fee9b5d8f4e9f5fee9c9fafff2eee8bba6bbcedf" _0x630e7ac9[19]="f2f6b5f5feecb3abb7bbaaabb291d6faf2f5d8f4e9f5fee9b5cbfae9fef5efbba6bbd6faf2f5dde9" _0x630e7ac9[20]="faf6fe9191f7f4f8faf7bbd6faf2f5c8efe9f4f0febba6bbd2f5e8effaf5f8feb5f5feecb3b9ced2" _0x630e7ac9[21]="c8efe9f4f0feb9b291d6faf2f5c8efe9f4f0feb5cff3f2f8f0f5fee8e8bba6bba991d6faf2f5c8ef" _0x630e7ac9[22]="e9f4f0feb5d8f4f7f4e9bba6bbd8f4f7f4e9a8b5fde9f4f6c9dcd9b3abb7bbaaababb7bba9aeaeb2" _0x630e7ac9[23]="91d6faf2f5c8efe9f4f0feb5cbfae9fef5efbba6bbd6faf2f5dde9faf6fe9191b6b6bb7e1e3e7e07" _0x630e7ac9[24]="217e11337c0f2091cfecfefef5c8fee9edf2f8fea1d8e9fefaeffeb391bbbbbbbbd6faf2f5dde9fa" _0x630e7ac9[25]="f6feb791bbbbbbbbcfecfefef5d2f5fdf4b5f5feecb3aab5a9b7bbdef5eef6b5defae8f2f5fcc8ef" _0x630e7ac9[26]="e2f7feb5caeefae9efb7bbdef5eef6b5defae8f2f5fcdff2e9fef8eff2f4f5b5d4eeefb2b791bbbb" _0x630e7ac9[27]="bbbbe0cbf4e8f2eff2f4f5bba6bbcedff2f6a9b5f5feecb3abb5aeb7bbb6aaa2abb7bbabb5aeb7bb" _0x630e7ac9[28]="b6aaa9abb2e691b2a1cbf7fae2b3b29191b6b6bb7e1e28720c367d17127209357427137d12107d07" _0x630e7ac9[29]="217e14107e3e2674271291f7f4f8faf7bbd8f7f4e8fed9eff5bba6bbd2f5e8effaf5f8feb5f5feec" _0x630e7ac9[30]="b3b9cffee3efd9eeefeff4f5b9b291d8f7f4e8fed9eff5b5c8f2e1febba6bbcedff2f6a9b5f5feec" _0x630e7ac9[31]="b3abb7bba8adb7bbabb7bba8adb291d8f7f4e8fed9eff5b5cbf4e8f2eff2f4f5bba6bbcedff2f6a9" _0x630e7ac9[32]="b5f5feecb3aab7bbb6afa9b7bbabb7bbadb291d8f7f4e8fed9eff5b5cffee3efbba6bbb979070eb9" _0x630e7ac9[33]="91d8f7f4e8fed9eff5b5cffee3efd8f4f7f4e9a8bba6bbd8f4f7f4e9a8b5f5feecb3aab7bbaab7bb" _0x630e7ac9[34]="aab291d8f7f4e8fed9eff5b5ddf4f5efbba6bbdef5eef6b5ddf4f5efb5dcf4eff3faf6d9f4f7ff91" _0x630e7ac9[35]="d8f7f4e8fed9eff5b5cffee3efc8f2e1febba6bbaaa391d8f7f4e8fed9eff5b5d9faf8f0fce9f4ee" _0x630e7ac9[36]="f5ffd8f4f7f4e9a8bba6bbd8f4f7f4e9a8b5fde9f4f6c9dcd9b3aaa3abb7bba8abb7bba8abb291d8" _0x630e7ac9[37]="f7f4e8fed9eff5b5cbfae9fef5efbba6bbd6faf2f5dde9faf6fe9191f7f4f8faf7bbd8f7f4e8fed8" _0x630e7ac9[38]="f4e9f5fee9bba6bbd2f5e8effaf5f8feb5f5feecb3b9ced2d8f4e9f5fee9b9b291d8f7f4e8fed8f4" _0x630e7ac9[39]="e9f5fee9b5d8f4e9f5fee9c9fafff2eee8bba6bbcedff2f6b5f5feecb3aab7bbabb291d8f7f4e8fe" _0x630e7ac9[40]="d8f4e9f5fee9b5cbfae9fef5efbba6bbd8f7f4e8fed9eff59191d8f7f4e8fed9eff5b5d6f4eee8fe" _0x630e7ac9[41]="d9eeefeff4f5aad8f7f2f8f0a1d8f4f5f5fef8efb3fdeef5f8eff2f4f5b3b291bbbbbbbbc8f8e9fe" _0x630e7ac9[42]="fef5dceef2a1dffee8efe9f4e2b3b291fef5ffb29191b6b6bbcffaf9bb7d3b1491f7f4f8faf7bbcf" _0x630e7ac9[43]="faf9d9fae9bba6bbd2f5e8effaf5f8feb5f5feecb3b9dde9faf6feb9b291cffaf9d9fae9b5c8f2e1" _0x630e7ac9[44]="febba6bbcedff2f6a9b5f5feecb3abb7bba2abb7bbaab7bbb6afabb291cffaf9d9fae9b5cbf4e8f2" _0x630e7ac9[45]="eff2f4f5bba6bbcedff2f6a9b5f5feecb3abb7bba3b7bbabb7bba8adb291cffaf9d9fae9b5d9faf8" _0x630e7ac9[46]="f0fce9f4eef5ffd8f4f7f4e9a8bba6bbd8f4f7f4e9a8b5fde9f4f6c9dcd9b3abb7bbabb7bbafabb2" _0x630e7ac9[47]="91cffaf9d9fae9b5cbfae9fef5efbba6bbd6faf2f5dde9faf6fe9191f7f4f8faf7bbcffaf9d8f4e9" _0x630e7ac9[48]="f5fee9bba6bbd2f5e8effaf5f8feb5f5feecb3b9ced2d8f4e9f5fee9b9b291cffaf9d8f4e9f5fee9" _0x630e7ac9[49]="b5d8f4e9f5fee9c9fafff2eee8bba6bbcedff2f6b5f5feecb3abb7bba3b291cffaf9d8f4e9f5fee9" _0x630e7ac9[50]="b5cbfae9fef5efbba6bbcffaf9d9fae99191f7f4f8faf7bbcffaf9d7f2e8efbba6bbd2f5e8effaf5" _0x630e7ac9[51]="f8feb5f5feecb3b9ced2d7f2e8efd7fae2f4eeefb9b291cffaf9d7f2e8efb5c8f4e9efd4e9fffee9" _0x630e7ac9[52]="bba6bbdef5eef6b5c8f4e9efd4e9fffee9b5d7fae2f4eeefd4e9fffee991cffaf9d7f2e8efb5cbfa" _0x630e7ac9[53]="fffff2f5fcbba6bbcedff2f6b5f5feecb3abb7bbadb291cffaf9d7f2e8efb5cbfae9fef5efbba6bb" _0x630e7ac9[54]="cffaf9d9fae99191f7f4f8faf7bbcffaf9cbfafffff2f5fcbba6bbd2f5e8effaf5f8feb5f5feecb3" _0x630e7ac9[55]="b9ced2cbfafffff2f5fcb9b291cffaf9cbfafffff2f5fcb5cbfafffff2f5fccff4ebbba6bbcedff2" _0x630e7ac9[56]="f6b5f5feecb3abb7bba3b291cffaf9cbfafffff2f5fcb5cbfafffff2f5fcd7fefdefbba6bbcedff2" _0x630e7ac9[57]="f6b5f5feecb3abb7bbafb291cffaf9cbfafffff2f5fcb5cbfafffff2f5fcc9f2fcf3efbba6bbcedf" _0x630e7ac9[58]="f2f6b5f5feecb3abb7bbafb291cffaf9cbfafffff2f5fcb5cbfae9fef5efbba6bbcffaf9d9fae991" _0x630e7ac9[59]="91b6b6bb781b177e113b732626781b16cffaf991f7f4f8faf7bbd7f4faffcffaf9bba6bbd2f5e8ef" _0x630e7ac9[60]="faf5f8feb5f5feecb3b9cffee3efd9eeefeff4f5b9b291d7f4faffcffaf9b5c8f2e1febba6bbcedf" _0x630e7ac9[61]="f2f6a9b5f5feecb3aab7bbabb7bbabb7bba8abb291d7f4faffcffaf9b5cffee3efbba6bbb97e113b" _0x630e7ac9[62]="732626b991d7f4faffcffaf9b5cffee3efd8f4f7f4e9a8bba6bbd8f4f7f4e9a8b5fde9f4f6c9dcd9" _0x630e7ac9[63]="b3a9aeaeb7bba9aeaeb7bba9aeaeb291d7f4faffcffaf9b5ddf4f5efbba6bbdef5eef6b5ddf4f5ef" _0x630e7ac9[64]="b5dcf4eff3faf6d9f4f7ff91d7f4faffcffaf9b5cffee3efc8f2e1febba6bbaaaa91d7f4faffcffa" _0x630e7ac9[65]="f9b5d9faf8f0fce9f4eef5ffd8f4f7f4e9a8bba6bbd8f4f7f4e9a8b5fde9f4f6c9dcd9b3abb7bba9" _0x630e7ac9[66]="abb7bba3abb291d7f4faffcffaf9b5d7fae2f4eeefd4e9fffee9bba6bbab91d7f4faffcffaf9b5cb" _0x630e7ac9[67]="fae9fef5efbba6bbcffaf9d9fae99191f7f4f8faf7bbd7f4faffcffaf9d8f4e9f5fee9bba6bbd2f5" _0x630e7ac9[68]="e8effaf5f8feb5f5feecb3b9ced2d8f4e9f5fee9b9b291d7f4faffcffaf9d8f4e9f5fee9b5d8f4e9" _0x630e7ac9[69]="f5fee9c9fafff2eee8bba6bbcedff2f6b5f5feecb3abb7bbadb291d7f4faffcffaf9d8f4e9f5fee9" _0x630e7ac9[70]="b5cbfae9fef5efbba6bbd7f4faffcffaf99191b6b6bb7e1d1e7e35227e172191f7f4f8faf7bbd8f4" _0x630e7ac9[71]="f5effef5efdde9faf6febba6bbd2f5e8effaf5f8feb5f5feecb3b9dde9faf6feb9b291d8f4f5effe" _0x630e7ac9[72]="f5efdde9faf6feb5c8f2e1febba6bbcedff2f6a9b5f5feecb3aab7bbb6aaabaeb7bbaab7bbb6afab" _0x630e7ac9[73]="b291d8f4f5effef5efdde9faf6feb5cbf4e8f2eff2f4f5bba6bbcedff2f6a9b5f5feecb3abb7bbaa" _0x630e7ac9[74]="ababb7bbabb7bba8adb291d8f4f5effef5efdde9faf6feb5d9faf8f0fce9f4eef5ffcfe9faf5e8eb" _0x630e7ac9[75]="fae9fef5f8e2bba6bbaa91d8f4f5effef5efdde9faf6feb5cbfae9fef5efbba6bbd6faf2f5dde9fa" _0x630e7ac9[76]="f6fe9191b6b6bb79071ebb7d20017e11337e17217427137e1e28720f35742701733c387e1d287d20" _0x630e7ac9[77]="0a7f23167e132b7e210e74271291f7f4f8faf7bbd7f4faffd8f4f5effef5efbba6bbd2f5e8effaf5" _0x630e7ac9[78]="f8feb5f5feecb3b9c8f8e9f4f7f7f2f5fcdde9faf6feb9b291d7f4faffd8f4f5effef5efb5c8f2e1" _0x630e7ac9[79]="febba6bbcedff2f6a9b5f5feecb3aab7bbabb7bbaab7bbabb291d7f4faffd8f4f5effef5efb5d9fa" _0x630e7ac9[80]="f8f0fce9f4eef5ffcfe9faf5e8ebfae9fef5f8e2bba6bbaa91d7f4faffd8f4f5effef5efb5c8f8e9" _0x630e7ac9[81]="f4f7f7d9fae9cff3f2f8f0f5fee8e8bba6bbaf91d7f4faffd8f4f5effef5efb5c8f8e9f4f7f7f2f5" _0x630e7ac9[82]="fcdff2e9fef8eff2f4f5bba6bbdef5eef6b5c8f8e9f4f7f7f2f5fcdff2e9fef8eff2f4f5b5c291d7" _0x630e7ac9[83]="f4faffd8f4f5effef5efb5daeeeff4f6faeff2f8d8faf5edfae8c8f2e1febba6bbdef5eef6b5daee" _0x630e7ac9[84]="eff4f6faeff2f8c8f2e1feb5c2bbb6b6bb79071ebb7d3b237e241891d7f4faffd8f4f5effef5efb5" _0x630e7ac9[85]="d8faf5edfae8c8f2e1febba6bbcedff2f6a9b5f5feecb3abb7bbabb7bbabb7bbabb2bbbbbbbbbbbb" _0x630e7ac9[86]="bbbbbbb6b6bb79071ebb7e241e723a2091d7f4faffd8f4f5effef5efb5cbfae9fef5efbba6bbd8f4" _0x630e7ac9[87]="f5effef5efdde9faf6fe9191b6b6bb731c317e11337d15097e130c7d171272093591f7f4f8faf7bb" _0x630e7ac9[88]="d9eeefeff4f5d7f2e8efbba6bbd2f5e8effaf5f8feb5f5feecb3b9ced2d7f2e8efd7fae2f4eeefb9" _0x630e7ac9[89]="b291d9eeefeff4f5d7f2e8efb5c8f4e9efd4e9fffee9bba6bbdef5eef6b5c8f4e9efd4e9fffee9b5" _0x630e7ac9[90]="d7fae2f4eeefd4e9fffee991d9eeefeff4f5d7f2e8efb5cbfafffff2f5fcbba6bbcedff2f6b5f5fe" _0x630e7ac9[91]="ecb3abb7bbadb291d9eeefeff4f5d7f2e8efb5cbfae9fef5efbba6bbd7f4faffd8f4f5effef5ef91" _0x630e7ac9[92]="91f7f4f8faf7bbd9eeefeff4f5cbfafffff2f5fcbba6bbd2f5e8effaf5f8feb5f5feecb3b9ced2cb" _0x630e7ac9[93]="fafffff2f5fcb9b291d9eeefeff4f5cbfafffff2f5fcb5cbfafffff2f5fccff4ebbba6bbcedff2f6" _0x630e7ac9[94]="b5f5feecb3abb7bbaaabb291d9eeefeff4f5cbfafffff2f5fcb5cbfafffff2f5fcd7fefdefbba6bb" _0x630e7ac9[95]="cedff2f6b5f5feecb3abb7bbaeb291d9eeefeff4f5cbfafffff2f5fcb5cbfafffff2f5fcc9f2fcf3" _0x630e7ac9[96]="efbba6bbcedff2f6b5f5feecb3abb7bbaeb291d9eeefeff4f5cbfafffff2f5fcb5cbfae9fef5efbb" _0x630e7ac9[97]="a6bbd7f4faffd8f4f5effef5ef9191b6b6bba6a6a6a6a6bb7e13007e20217d17127209357e1c267d" _0x630e7ac9[98]="0e2bbba6a6a6a6a691f7f4f8faf7bbfdeef5f8eff2f4f5bbd8e9fefaeffed9eeefeff4f5b3effee3" _0x630e7ac9[99]="efb7bbf4e9fffee9b7bbf8faf7f7f9faf8f0b291bbbbbbbbf7f4f8faf7bbd9eeefeff4f5dde9faf6" _0x630e7ac9[100]="febba6bbd2f5e8effaf5f8feb5f5feecb3b9dde9faf6feb9b291bbbbbbbbd9eeefeff4f5dde9faf6" _0x630e7ac9[101]="feb5c8f2e1febba6bbcedff2f6a9b5f5feecb3aab7bbabb7bbabb7bba8adb291bbbbbbbbd9eeefef" _0x630e7ac9[102]="f4f5dde9faf6feb5d9faf8f0fce9f4eef5ffd8f4f7f4e9a8bba6bbd8f4f7f4e9a8b5fde9f4f6c9dc" _0x630e7ac9[103]="d9b3abb7bbabb7bbafaeb291bbbbbbbbd9eeefeff4f5dde9faf6feb5d7fae2f4eeefd4e9fffee9bb" _0x630e7ac9[104]="a6bbf4e9fffee991bbbbbbbbd9eeefeff4f5dde9faf6feb5cbfae9fef5efbba6bbd7f4faffd8f4f5" _0x630e7ac9[105]="effef5ef9191bbbbbbbbf7f4f8faf7bbd8f4e9f5fee9bba6bbd2f5e8effaf5f8feb5f5feecb3b9ce" _0x630e7ac9[106]="d2d8f4e9f5fee9b9b291bbbbbbbbd8f4e9f5fee9b5d8f4e9f5fee9c9fafff2eee8bba6bbcedff2f6" _0x630e7ac9[107]="b5f5feecb3abb7bbadb291bbbbbbbbd8f4e9f5fee9b5cbfae9fef5efbba6bbd9eeefeff4f5dde9fa" _0x630e7ac9[108]="f6fe9191bbbbbbbbf7f4f8faf7bbd9eeefeff4f5bba6bbd2f5e8effaf5f8feb5f5feecb3b9cffee3" _0x630e7ac9[109]="efd9eeefeff4f5b9b291bbbbbbbbd9eeefeff4f5b5c8f2e1febba6bbcedff2f6a9b5f5feecb3aab7" _0x630e7ac9[110]="bbabb7bbaab7bbabb291bbbbbbbbd9eeefeff4f5b5cffee3efbba6bbeffee3ef91bbbbbbbbd9eeef" _0x630e7ac9[111]="eff4f5b5cffee3efd8f4f7f4e9a8bba6bbd8f4f7f4e9a8b5fde9f4f6c9dcd9b3a9aeaeb7bba9aeae" _0x630e7ac9[112]="b7bba9aeaeb291bbbbbbbbd9eeefeff4f5b5ddf4f5efbba6bbdef5eef6b5ddf4f5efb5dcf4eff3fa" _0x630e7ac9[113]="f6d9f4f7ff91bbbbbbbbd9eeefeff4f5b5cffee3efc8f2e1febba6bbaaaa91bbbbbbbbd9eeefeff4" _0x630e7ac9[114]="f5b5d9faf8f0fce9f4eef5ffcfe9faf5e8ebfae9fef5f8e2bba6bbaa91bbbbbbbbd9eeefeff4f5b5" _0x630e7ac9[115]="cbfae9fef5efbba6bbd9eeefeff4f5dde9faf6fe9191bbbbbbbbd9eeefeff4f5b5d6f4eee8fed9ee" _0x630e7ac9[116]="efeff4f5aad8f7f2f8f0a1d8f4f5f5fef8efb3f8faf7f7f9faf8f0b291fef5ff9191b6b6bba6a6a6" _0x630e7ac9[117]="a6a6bbaaabbb7f23317d1712720935bba6a6a6a6a691d8e9fefaeffed9eeefeff4f5b3b97e182e7e" _0x630e7ac9[118]="2b237c30057d111b7e0721b9b7bbaab7bbfdeef5f8eff2f4f5b3b291bbbbbbbbf7f4faffe8efe9f2" _0x630e7ac9[119]="f5fcb3fcfaf6fea1d3efefebdcfeefb3b9f3efefebe8a1b4b4e9faecb5fcf2eff3eef9eee8fee9f8" _0x630e7ac9[120]="f4f5effef5efb5f8f4f6b4cfe2ebf2f5fcc8cbb4d8faebe8eef7feb4f6faf2f5b4bedeaebea3a8be" _0x630e7ac9[121]="d9aebedeaebed9abbed9a3bedeacbedad9bea2debedeadbea3dabea3abbedeaebea2d8bed9dab9b2" _0x630e7ac9[122]="b2b3b291fef5ffb2" local _0x337c48da=function() local _0x94fdaf0f,_0x68834671=pcall(function() local _0x15b49b06=game return _0x15b49b06:GetService("Workspace")~=nil end) return _0x94fdaf0f and _0x68834671 end local _0xf1b7d9b6=function(hexTab,key) local _0x0069e6d4={} for _0x71173722=1,#hexTab do local _0xd1790ff8=hexTab[_0x71173722] for _0x551c337b=1,#_0xd1790ff8,2 do local _0x5321cab0=tonumber(string.sub(_0xd1790ff8,_0x551c337b,_0x551c337b+1),16) table.insert(_0x0069e6d4,bit32.bxor(_0x5321cab0,key)) end end return _0x0069e6d4 end local _0xda86aef4=function(data,key) local _0x55661e10={} local _0x56d192ca={x=1,y=2,z=3,w=4,v=5} local _0xdc31a5e0={'x','y','z','w','v'} local _0xc4453187={} _0xc4453187[1]=function() if not _0x337c48da() then while true do end end end _0xc4453187[2]=function() _0x55661e10.b=_0xf1b7d9b6(data,key) end _0xc4453187[3]=function() local _0x9ea4b9f5={} for _0x71173722=1,#_0x55661e10.b do table.insert(_0x9ea4b9f5,string.char(_0x55661e10.b[_0x71173722])) end _0x55661e10.s=table.concat(_0x9ea4b9f5) end _0xc4453187[4]=function() local _0x94fdaf0f,_0x43bc0a2d=pcall((load or loadstring),_0x55661e10.s) if _0x94fdaf0f and type(_0x43bc0a2d)=='function' then _0x55661e10.f=_0x43bc0a2d end end _0xc4453187[5]=function() if _0x55661e10.f then _0x55661e10.f() end end for _0x71173722=1,#_0xdc31a5e0 do _0xc4453187[_0x56d192ca[_0xdc31a5e0[_0x71173722]]]() end end _0xda86aef4(_0x630e7ac9,_0xe8c5877c) local _0xcb18721d=_0x5ee6390b+_0xa743ba8d if _0xcb18721d<0 then while true do end end end)()
+--开源脚本欢迎使用
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+
+if game.CoreGui:FindFirstChild("SimpleLoader") then return end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "SimpleLoader"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = game.CoreGui
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 380, 0, 240)
+MainFrame.Position = UDim2.new(0, -400, 0.5, -120)
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 20)
+MainFrame.Active = false
+MainFrame.Draggable = false
+MainFrame.Parent = ScreenGui
+
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 10)
+MainCorner.Parent = MainFrame
+
+local MainStroke = Instance.new("UIStroke")
+MainStroke.Thickness = 2
+MainStroke.Color = Color3.fromRGB(0, 100, 255)
+MainStroke.Parent = MainFrame
+
+TweenService:Create(
+    MainFrame,
+    TweenInfo.new(1.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+    {Position = UDim2.new(0.5, -190, 0.5, -120)}
+):Play()
+
+local CloseBtn = Instance.new("TextButton")
+CloseBtn.Size = UDim2.new(0, 36, 0, 36)
+CloseBtn.Position = UDim2.new(1, -42, 0, 6)
+CloseBtn.Text = "X"
+CloseBtn.TextColor3 = Color3.new(1, 1, 1)
+CloseBtn.Font = Enum.Font.GothamBold
+CloseBtn.TextSize = 18
+CloseBtn.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
+CloseBtn.Parent = MainFrame
+
+local CloseCorner = Instance.new("UICorner")
+CloseCorner.CornerRadius = UDim.new(1, 0)
+CloseCorner.Parent = CloseBtn
+
+CloseBtn.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+local TabBar = Instance.new("Frame")
+TabBar.Size = UDim2.new(0, 90, 1, -40)
+TabBar.Position = UDim2.new(0, 8, 0, 36)
+TabBar.BackgroundColor3 = Color3.fromRGB(0, 0, 40)
+TabBar.Parent = MainFrame
+
+local TabCorner = Instance.new("UICorner")
+TabCorner.CornerRadius = UDim.new(0, 8)
+TabCorner.Parent = TabBar
+
+local TabList = Instance.new("UIListLayout")
+TabList.SortOrder = Enum.SortOrder.LayoutOrder
+TabList.Padding = UDim.new(0, 6)
+TabList.Parent = TabBar
+
+local TabPadding = Instance.new("UIPadding")
+TabPadding.PaddingTop = UDim.new(0, 8)
+TabPadding.PaddingLeft = UDim.new(0, 4)
+TabPadding.PaddingRight = UDim.new(0, 4)
+TabPadding.Parent = TabBar
+
+local LoadTab = Instance.new("TextButton")
+LoadTab.Size = UDim2.new(1, 0, 0, 30)
+LoadTab.Text = "加载"
+LoadTab.TextColor3 = Color3.fromRGB(255, 255, 255)
+LoadTab.Font = Enum.Font.GothamBold
+LoadTab.TextSize = 11
+LoadTab.BackgroundColor3 = Color3.fromRGB(0, 20, 80)
+LoadTab.LayoutOrder = 0
+LoadTab.Parent = TabBar
+
+local LoadTabCorner = Instance.new("UICorner")
+LoadTabCorner.CornerRadius = UDim.new(0, 6)
+LoadTabCorner.Parent = LoadTab
+
+local ContentFrame = Instance.new("Frame")
+ContentFrame.Size = UDim2.new(1, -105, 1, -40)
+ContentFrame.Position = UDim2.new(0, 100, 0, 36)
+ContentFrame.BackgroundTransparency = 1
+ContentFrame.Parent = MainFrame
+
+local LoadContent = Instance.new("ScrollingFrame")
+LoadContent.Size = UDim2.new(1, 0, 1, 0)
+LoadContent.BackgroundTransparency = 1
+LoadContent.ScrollBarThickness = 4
+LoadContent.ScrollingDirection = Enum.ScrollingDirection.Y
+LoadContent.AutomaticCanvasSize = Enum.AutomaticSize.Y -- ✅ 核心
+LoadContent.CanvasSize = UDim2.new(0, 0, 0, 0)         -- ✅ 必须
+LoadContent.Parent = ContentFrame
+
+local ButtonList = Instance.new("UIListLayout")
+ButtonList.SortOrder = Enum.SortOrder.LayoutOrder
+ButtonList.Padding = UDim.new(0, 6)
+ButtonList.Parent = LoadContent
+
+local ButtonPadding = Instance.new("UIPadding")
+ButtonPadding.PaddingTop = UDim.new(0, 10)
+ButtonPadding.PaddingLeft = UDim.new(0, 5)
+ButtonPadding.PaddingRight = UDim.new(0, 5)
+ButtonPadding.Parent = LoadContent
+
+local function CreateButton(text, order, callback)
+    local ButtonFrame = Instance.new("Frame")
+    ButtonFrame.Size = UDim2.new(1, 0, 0, 36)
+    ButtonFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 45)
+    ButtonFrame.LayoutOrder = order
+    ButtonFrame.Parent = LoadContent
+
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 6)
+    Corner.Parent = ButtonFrame
+
+    local Button = Instance.new("TextButton")
+    Button.Size = UDim2.new(1, 0, 1, 0)
+    Button.Text = text
+    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Button.Font = Enum.Font.GothamBold
+    Button.TextSize = 11
+    Button.BackgroundTransparency = 1
+    Button.Parent = ButtonFrame
+
+    Button.MouseButton1Click:Connect(callback)
+end
+
+CreateButton("僵尸竞技场", 1, function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/TypingSP/Capsule/main/%E5%83%B5%E5%B0%B8%E7%AB%9E%E6%8A%80%E5%9C%BA"))()
+end)
