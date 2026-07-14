@@ -138,3 +138,7 @@ end
 CreateButton("僵尸竞技场", 1, function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/TypingSP/Capsule/main/%E5%83%B5%E5%B0%B8%E7%AB%9E%E6%8A%80%E5%9C%BA"))()
 end)
+
+CreateButton("刀刃球", 2, function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/TypingSP/Capsule/main/%E5%88%80%E5%88%83%E7%90%83"))()
+end)
