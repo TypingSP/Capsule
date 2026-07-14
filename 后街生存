@@ -1,0 +1,310 @@
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
+
+local Capsule = {
+    DeepPurple = Color3.fromHex("#1A0A2E"),
+    MidPurple = Color3.fromHex("#3D1A78"),
+    Purple = Color3.fromHex("#7B2FF7"),
+    HotPink = Color3.fromHex("#E8308A"),
+    Coral = Color3.fromHex("#FF6B6B"),
+    WarmOrange = Color3.fromHex("#F9A826"),
+    Gold = Color3.fromHex("#FFD93D"),
+    Cyan = Color3.fromHex("#00D2FF"),
+    SoftPink = Color3.fromHex("#FFB6D9"),
+    Lavender = Color3.fromHex("#C084FC"),
+    DarkBg = Color3.fromHex("#0D0015"),
+    White = Color3.fromHex("#FFFFFF"),
+}
+
+local MarketplaceService = game:GetService("MarketplaceService")
+
+local function getPlaceName()
+    local ok, info = pcall(function() return MarketplaceService:GetProductInfo(game.PlaceId) end)
+    return (ok and info and info.Name) or game.Name
+end
+
+local placeName = getPlaceName()
+
+function gradient(text, startColor, endColor)
+    local result, chars = "", {}
+    for uchar in text:gmatch("[%z\1-\127\194-\244][\128-\191]*") do table.insert(chars, uchar) end
+    local length = #chars
+    for i = 1, length do
+        local t = (i - 1) / math.max(length - 1, 1)
+        local r = startColor.R + (endColor.R - startColor.R) * t
+        local g = startColor.G + (endColor.G - startColor.G) * t
+        local b = startColor.B + (endColor.B - startColor.B) * t
+        result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', math.floor(r * 255), math.floor(g * 255), math.floor(b * 255), chars[i])
+    end
+    return result
+end
+
+function gradient3(text, color1, color2, color3)
+    local result, chars = "", {}
+    for uchar in text:gmatch("[%z\1-\127\194-\244][\128-\191]*") do table.insert(chars, uchar) end
+    local length = #chars
+    for i = 1, length do
+        local t = (i - 1) / math.max(length - 1, 1)
+        local r, g, b
+        if t < 0.5 then
+            local s = t * 2
+            r = color1.R + (color2.R - color1.R) * s
+            g = color1.G + (color2.G - color1.G) * s
+            b = color1.B + (color2.B - color1.B) * s
+        else
+            local s = (t - 0.5) * 2
+            r = color2.R + (color3.R - color2.R) * s
+            g = color2.G + (color3.G - color2.G) * s
+            b = color2.B + (color3.B - color2.B) * s
+        end
+        result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', math.floor(r * 255), math.floor(g * 255), math.floor(b * 255), chars[i])
+    end
+    return result
+end
+
+local Window = WindUI:CreateWindow({
+    Title = gradient3("Capsule Sp", Capsule.DeepPurple, Capsule.HotPink, Capsule.WarmOrange),
+    Author = gradient3("Typing", Capsule.Cyan, Capsule.Purple, Capsule.HotPink),
+    Icon = "https://raw.githubusercontent.com/TypingSP/Capsule/main/1783909378391.png",
+    IconThemed = false,
+    Folder = "CloudHub",
+    Size = UDim2.fromOffset(320, 320),
+    Transparent = true,
+    Theme = "Dark",
+    SideBarWidth = 160,
+    HideSearchBar = false,
+    ScrollBarEnabled = true,
+    Background = "https://raw.githubusercontent.com/TypingSP/Capsule/main/share_1783905558267.jpeg",
+    BackgroundImageTransparency = 0.35,
+})
+
+Window:Tag({ Title = placeName, Radius = 5, Color = Capsule.Purple })
+
+Window:EditOpenButton({
+    Title = "Capsule",
+    Icon = "https://raw.githubusercontent.com/TypingSP/Capsule/main/1783909378391.png",
+    CornerRadius = UDim.new(0, 8),
+    StrokeThickness = 2,
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Capsule.DeepPurple),
+        ColorSequenceKeypoint.new(0.25, Capsule.Purple),
+        ColorSequenceKeypoint.new(0.5, Capsule.HotPink),
+        ColorSequenceKeypoint.new(0.75, Capsule.WarmOrange),
+        ColorSequenceKeypoint.new(1, Capsule.DeepPurple),
+    }),
+    Draggable = true,
+})
+
+local borderEnabled = true
+local COLOR_SCHEMES = {
+    ["胶囊"] = {
+        type = "gradient",
+        colors = {
+            ColorSequenceKeypoint.new(0, Capsule.DeepPurple),
+            ColorSequenceKeypoint.new(0.2, Capsule.Purple),
+            ColorSequenceKeypoint.new(0.4, Capsule.HotPink),
+            ColorSequenceKeypoint.new(0.6, Capsule.WarmOrange),
+            ColorSequenceKeypoint.new(0.8, Capsule.Cyan),
+            ColorSequenceKeypoint.new(1, Capsule.DeepPurple),
+        }
+    }
+}
+local currentColorScheme = "胶囊"
+
+local function ensureBlurElement()
+    local mainFrame = Window.UIElements and Window.UIElements.Main
+    if not mainFrame then return end
+    local blur = mainFrame:FindFirstChild("Blur")
+    if not blur then
+        blur = Instance.new("ImageLabel")
+        blur.Name = "Blur"
+        blur.Size = UDim2.new(1, 0, 1, 0)
+        blur.Position = UDim2.new(0, 0, 0, 0)
+        blur.BackgroundTransparency = 1
+        blur.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+        blur.ImageTransparency = 0.15
+        blur.ZIndex = 0
+        blur.Parent = mainFrame
+    end
+    return blur
+end
+
+local function getColorSequenceForScheme(scheme)
+    local data = COLOR_SCHEMES[scheme]
+    if data.type == "gradient" then return data.colors end
+    return ColorSequence.new(Capsule.Purple)
+end
+
+local function applyBorderColor(c, colorSeq, e)
+    e = e or 0.15
+    local f = c.UIElements and c.UIElements.Main or c.Frame or c.Gui or c
+    if not f then return false end
+    local g = f:FindFirstChild("Blur", true)
+    if g and g:IsA("ImageLabel") then
+        g.ImageColor3 = Capsule.Purple
+        g.ImageTransparency = e
+        local existingGrad = g:FindFirstChild("CapsuleBorderGrad")
+        if not existingGrad then
+            existingGrad = Instance.new("UIGradient")
+            existingGrad.Name = "CapsuleBorderGrad"
+            existingGrad.Color = ColorSequence.new(colorSeq)
+            existingGrad.Rotation = 0
+            existingGrad.Parent = g
+        else
+            existingGrad.Color = ColorSequence.new(colorSeq)
+        end
+        return true
+    end
+    local h = f:FindFirstChild("Shadow", true)
+    if h and h:IsA("ImageLabel") then
+        h.ImageColor3 = Capsule.Purple
+        h.ImageTransparency = e
+        return true
+    end
+    return false
+end
+
+local borderConnection, borderRotation = nil, 0
+
+local function startBorderAnimation()
+    if borderConnection then borderConnection:Disconnect(); borderConnection = nil end
+    if not borderEnabled then return end
+    ensureBlurElement()
+    borderConnection = game:GetService("RunService").Heartbeat:Connect(function(delta)
+        local mainFrame = Window.UIElements and Window.UIElements.Main
+        if not mainFrame or not mainFrame.Visible then return end
+        borderRotation = (borderRotation + 25 * delta) % 360
+        local colorSeq = getColorSequenceForScheme(currentColorScheme)
+        applyBorderColor(Window, colorSeq, 0.15)
+        local blur = mainFrame:FindFirstChild("Blur", true)
+        if blur then
+            local grad = blur:FindFirstChild("CapsuleBorderGrad")
+            if grad then grad.Rotation = borderRotation end
+        end
+    end)
+end
+
+local function stopBorderAnimation()
+    if borderConnection then borderConnection:Disconnect(); borderConnection = nil end
+end
+
+local function setupVisibilityListener()
+    local mainFrame = Window.UIElements and Window.UIElements.Main
+    if not mainFrame then
+        task.spawn(function()
+            repeat task.wait() until Window.UIElements and Window.UIElements.Main
+            setupVisibilityListener()
+        end)
+        return
+    end
+    if mainFrame.Visible and borderEnabled then startBorderAnimation() elseif not mainFrame.Visible then stopBorderAnimation() end
+    mainFrame:GetPropertyChangedSignal("Visible"):Connect(function()
+        if mainFrame.Visible and borderEnabled then startBorderAnimation() else stopBorderAnimation() end
+    end)
+end
+
+setupVisibilityListener()
+Window:OnClose(stopBorderAnimation)
+
+local Tabs = {
+    FuncTab = Window:Tab({ Title = "功能" }),
+    TpTab = Window:Tab({ Title = "传送" }),
+}
+
+local Players = game:GetService("Players")
+local lastPosition = nil
+
+local function teleportTo(pos)
+    local char = Players.LocalPlayer.Character
+    if not char then return end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+    lastPosition = hrp.Position
+    hrp.CFrame = CFrame.new(pos)
+end
+
+Tabs.FuncTab:Section({ Title = "自动挖掘" })
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ToolEvent = ReplicatedStorage:WaitForChild("Events"):WaitForChild("ToolEvent")
+
+local toolLoopEnabled, toolLoopConnection = false, nil
+
+local function startToolLoop()
+    if toolLoopConnection then return end
+    toolLoopConnection = game:GetService("RunService").Heartbeat:Connect(function()
+        if not toolLoopEnabled then return end
+        ToolEvent:FireServer("Activated", false)
+        task.wait(0.5)
+        if not toolLoopEnabled then return end
+        ToolEvent:FireServer("Activated", true)
+        task.wait(0.5)
+    end)
+end
+
+local function stopToolLoop()
+    toolLoopEnabled = false
+    if toolLoopConnection then toolLoopConnection:Disconnect(); toolLoopConnection = nil end
+end
+
+Tabs.FuncTab:Toggle({
+    Title = "启用自动挖掘",
+    Value = false,
+    Callback = function(state)
+        toolLoopEnabled = state
+        if state then startToolLoop() else stopToolLoop() end
+    end
+})
+
+Tabs.FuncTab:Section({ Title = "自动拿起木棍" })
+
+local stickPickupEnabled, stickPickupConnection = false, nil
+
+local function startStickPickup()
+    if stickPickupConnection then return end
+    stickPickupConnection = game:GetService("RunService").Heartbeat:Connect(function()
+        if not stickPickupEnabled then return end
+        local player = Players.LocalPlayer
+        local backpack = player:FindFirstChild("Backpack")
+        if not backpack then return end
+        for _, item in pairs(backpack:GetChildren()) do
+            if item:IsA("Tool") and item.Name:sub(1, 5):lower() == "stick" then
+                player.Character = player.Character or workspace:FindFirstChild(player.Name)
+                if player.Character then item.Parent = player.Character end
+                break
+            end
+        end
+    end)
+end
+
+local function stopStickPickup()
+    stickPickupEnabled = false
+    if stickPickupConnection then stickPickupConnection:Disconnect(); stickPickupConnection = nil end
+end
+
+Tabs.FuncTab:Toggle({
+    Title = "自动拿起木棍",
+    Value = false,
+    Callback = function(state)
+        stickPickupEnabled = state
+        if state then startStickPickup() else stopStickPickup() end
+    end
+})
+
+Tabs.TpTab:Section({ Title = "常用传送" })
+
+Tabs.TpTab:Button({ Title = "传送到垃圾大师", Callback = function() teleportTo(Vector3.new(-173.27, 3.50, 47.06)) end })
+Tabs.TpTab:Button({ Title = "传送回原位置", Callback = function()
+    if not lastPosition then return end
+    local char = Players.LocalPlayer.Character
+    if not char then return end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+    hrp.CFrame = CFrame.new(lastPosition)
+end })
+
+Tabs.TpTab:Section({ Title = "地点传送" })
+
+Tabs.TpTab:Button({ Title = "传送到豆子工厂", Callback = function() teleportTo(Vector3.new(-269.05, 3.50, 155.16)) end })
+Tabs.TpTab:Button({ Title = "传送到后街", Callback = function() teleportTo(Vector3.new(-196.88, 3.50, 63.44)) end })
+Tabs.TpTab:Button({ Title = "传送到后街对面", Callback = function() teleportTo(Vector3.new(-184.26, 4.00, -189.72)) end })
+Tabs.TpTab:Button({ Title = "传送到下水道", Callback = function() teleportTo(Vector3.new(-245.42, -22.96, -1349.19)) end })
