@@ -1,0 +1,323 @@
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
+
+local Capsule = {
+    DeepPurple = Color3.fromHex("#1A0A2E"), MidPurple = Color3.fromHex("#3D1A78"),
+    Purple = Color3.fromHex("#7B2FF7"), HotPink = Color3.fromHex("#E8308A"),
+    Coral = Color3.fromHex("#FF6B6B"), WarmOrange = Color3.fromHex("#F9A826"),
+    Gold = Color3.fromHex("#FFD93D"), Cyan = Color3.fromHex("#00D2FF"),
+    SoftPink = Color3.fromHex("#FFB6D9"), Lavender = Color3.fromHex("#C084FC"),
+    DarkBg = Color3.fromHex("#0D0015"), White = Color3.fromHex("#FFFFFF"),
+}
+
+local MarketplaceService = game:GetService("MarketplaceService")
+local function getPlaceName()
+    local ok, info = pcall(function() return MarketplaceService:GetProductInfo(game.PlaceId) end)
+    return (ok and info and info.Name) or game.Name
+end
+local placeName = getPlaceName()
+
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Stats = game:GetService("Stats")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local VirtualUser = game:GetService("VirtualUser")
+local LocalPlayer = Players.LocalPlayer
+
+local parryCount, roundCount = 0, 0
+local AutoParryEnabled, AntiAfkEnabled = true, true
+
+LocalPlayer.CharacterAdded:Connect(function() roundCount += 1 end)
+
+local function DoParry()
+    pcall(function()
+        ReplicatedStorage.Remotes.ParryButtonPress:Fire()
+        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+        parryCount += 1
+    end)
+end
+
+RunService.PreRender:Connect(function()
+    if not AutoParryEnabled then return end
+    local char = LocalPlayer.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+    local ball, ballsFolder = nil, workspace:FindFirstChild("Balls")
+    if ballsFolder then
+        for _, v in ballsFolder:GetChildren() do
+            if v:GetAttribute("realBall") == true then ball = v break end
+        end
+    end
+    if ball and char:FindFirstChild("Highlight") then
+        local velocity = ball.AssemblyLinearVelocity.Magnitude
+        local distance = (ball.Position - char.HumanoidRootPart.Position).Magnitude
+        local ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
+        local range = (20 * ping) + (velocity / math.pi) * 2.3
+        if velocity > 5 and distance <= range then DoParry() task.wait(0.15) end
+    end
+end)
+
+LocalPlayer.Idled:Connect(function()
+    if AntiAfkEnabled then
+        VirtualUser:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+        task.wait(0.5)
+        VirtualUser:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+    end
+end)
+
+function gradient(text, startColor, endColor)
+    local result, chars = "", {}
+    for uchar in text:gmatch("[%z\1-\127\194-\244][\128-\191]*") do table.insert(chars, uchar) end
+    local length = #chars
+    for i = 1, length do
+        local t = (i - 1) / math.max(length - 1, 1)
+        local r = startColor.R + (endColor.R - startColor.R) * t
+        local g = startColor.G + (endColor.G - startColor.G) * t
+        local b = startColor.B + (endColor.B - startColor.B) * t
+        result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', math.floor(r*255), math.floor(g*255), math.floor(b*255), chars[i])
+    end
+    return result
+end
+
+function gradient3(text, color1, color2, color3)
+    local result, chars = "", {}
+    for uchar in text:gmatch("[%z\1-\127\194-\244][\128-\191]*") do table.insert(chars, uchar) end
+    local length = #chars
+    for i = 1, length do
+        local t = (i - 1) / math.max(length - 1, 1)
+        local r, g, b
+        if t < 0.5 then
+            local s = t * 2
+            r = color1.R + (color2.R - color1.R) * s
+            g = color1.G + (color2.G - color1.G) * s
+            b = color1.B + (color2.B - color1.B) * s
+        else
+            local s = (t - 0.5) * 2
+            r = color2.R + (color3.R - color2.R) * s
+            g = color2.G + (color3.G - color2.G) * s
+            b = color2.B + (color3.B - color2.B) * s
+        end
+        result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', math.floor(r*255), math.floor(g*255), math.floor(b*255), chars[i])
+    end
+    return result
+end
+
+local Window = WindUI:CreateWindow({
+    Title = gradient3("Capsule Sp", Capsule.DeepPurple, Capsule.HotPink, Capsule.WarmOrange),
+    Author = gradient3("Typing", Capsule.Cyan, Capsule.Purple, Capsule.HotPink),
+    Icon = "https://raw.githubusercontent.com/TypingSP/Capsule/main/1783909378391.png",
+    IconThemed = false, Folder = "CloudHub", Size = UDim2.fromOffset(320, 320),
+    Transparent = true, Theme = "Dark", SideBarWidth = 160,
+    HideSearchBar = false, ScrollBarEnabled = true,
+    Background = "https://raw.githubusercontent.com/TypingSP/Capsule/main/share_1783905558267.jpeg",
+    BackgroundImageTransparency = 0.35,
+})
+
+Window:Tag({ Title = placeName, Radius = 5, Color = Capsule.Purple })
+
+Window:EditOpenButton({
+    Title = "Capsule", Icon = "https://raw.githubusercontent.com/TypingSP/Capsule/main/1783909378391.png",
+    CornerRadius = UDim.new(0, 8), StrokeThickness = 2,
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Capsule.DeepPurple),
+        ColorSequenceKeypoint.new(0.25, Capsule.Purple),
+        ColorSequenceKeypoint.new(0.5, Capsule.HotPink),
+        ColorSequenceKeypoint.new(0.75, Capsule.WarmOrange),
+        ColorSequenceKeypoint.new(1, Capsule.DeepPurple),
+    }), Draggable = true,
+})
+
+local borderEnabled = true
+local COLOR_SCHEMES = {
+    ["胶囊"] = { type = "gradient", colors = {
+        ColorSequenceKeypoint.new(0, Capsule.DeepPurple),
+        ColorSequenceKeypoint.new(0.2, Capsule.Purple),
+        ColorSequenceKeypoint.new(0.4, Capsule.HotPink),
+        ColorSequenceKeypoint.new(0.6, Capsule.WarmOrange),
+        ColorSequenceKeypoint.new(0.8, Capsule.Cyan),
+        ColorSequenceKeypoint.new(1, Capsule.DeepPurple),
+    }}
+}
+local currentColorScheme = "胶囊"
+
+local function ensureBlurElement()
+    local mainFrame = Window.UIElements and Window.UIElements.Main
+    if not mainFrame then return end
+    local blur = mainFrame:FindFirstChild("Blur")
+    if not blur then
+        blur = Instance.new("ImageLabel")
+        blur.Name = "Blur"; blur.Size = UDim2.new(1,0,1,0); blur.Position = UDim2.new(0,0,0,0)
+        blur.BackgroundTransparency = 1; blur.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+        blur.ImageTransparency = 0.15; blur.ZIndex = 0; blur.Parent = mainFrame
+    end
+    return blur
+end
+
+local function getColorSequenceForScheme(scheme)
+    local data = COLOR_SCHEMES[scheme]
+    if data.type =="gradient" then return data.colors end
+    return ColorSequence.new(Capsule.Purple)
+end
+
+local function applyBorderColor(c, colorSeq, e)
+    e = e or 0.15
+    local f = c.UIElements and c.UIElements.Main or c.Frame or c.Gui or c
+    if not f then return false end
+    local g = f:FindFirstChild("Blur", true)
+    if g and g:IsA("ImageLabel") then
+        g.ImageColor3 = Capsule.Purple; g.ImageTransparency = e
+        local existingGrad = g:FindFirstChild("CapsuleBorderGrad")
+        if not existingGrad then
+            existingGrad = Instance.new("UIGradient")
+            existingGrad.Name = "CapsuleBorderGrad"
+            existingGrad.Color = ColorSequence.new(colorSeq)
+            existingGrad.Rotation = 0; existingGrad.Parent = g
+        else existingGrad.Color = ColorSequence.new(colorSeq) end
+        return true
+    end
+    local h = f:FindFirstChild("Shadow", true)
+    if h and h:IsA("ImageLabel") then h.ImageColor3 = Capsule.Purple; h.ImageTransparency = e; return true end
+    return false
+end
+
+local borderConnection, borderRotation = nil, 0
+
+local function startBorderAnimation()
+    if borderConnection then borderConnection:Disconnect(); borderConnection = nil end
+    if not borderEnabled then return end
+    ensureBlurElement()
+    borderConnection = RunService.Heartbeat:Connect(function(delta)
+        local mainFrame = Window.UIElements and Window.UIElements.Main
+        if not mainFrame or not mainFrame.Visible then return end
+        borderRotation = (borderRotation + 25 * delta) % 360
+        applyBorderColor(Window, getColorSequenceForScheme(currentColorScheme), 0.15)
+        local blur = mainFrame:FindFirstChild("Blur", true)
+        if blur then
+            local grad = blur:FindFirstChild("CapsuleBorderGrad")
+            if grad then grad.Rotation = borderRotation end
+        end
+    end)
+end
+
+local function stopBorderAnimation()
+    if borderConnection then borderConnection:Disconnect(); borderConnection = nil end
+end
+
+local function setupVisibilityListener()
+    local mainFrame = Window.UIElements and Window.UIElements.Main
+    if not mainFrame then
+        task.spawn(function()
+            repeat task.wait() until Window.UIElements and Window.UIElements.Main
+            setupVisibilityListener()
+        end); return
+    end
+    if mainFrame.Visible and borderEnabled then startBorderAnimation()
+    elseif not mainFrame.Visible then stopBorderAnimation() end
+    mainFrame:GetPropertyChangedSignal("Visible"):Connect(function()
+        if mainFrame.Visible and borderEnabled then startBorderAnimation()
+        else stopBorderAnimation() end
+    end)
+end
+
+setupVisibilityListener()
+Window:OnClose(stopBorderAnimation)
+
+task.spawn(function()
+    repeat task.wait() until Window.UIElements and Window.UIElements.Main
+    local mainContainer = Window.UIElements.Main
+    if mainContainer then
+        local stroke = Instance.new("UIStroke")
+        stroke.Name = "CapsuleStroke"; stroke.Thickness = 2; stroke.Color = Capsule.Purple
+        stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border; stroke.Transparency = 0.3
+        local gradientElement = Instance.new("UIGradient")
+        gradientElement.Name = "CapsuleGradient"
+        gradientElement.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Capsule.DeepPurple),
+            ColorSequenceKeypoint.new(0.17, Capsule.Purple),
+            ColorSequenceKeypoint.new(0.33, Capsule.HotPink),
+            ColorSequenceKeypoint.new(0.5, Capsule.WarmOrange),
+            ColorSequenceKeypoint.new(0.67, Capsule.Cyan),
+            ColorSequenceKeypoint.new(0.83, Capsule.Lavender),
+            ColorSequenceKeypoint.new(1, Capsule.DeepPurple),
+        })
+        gradientElement.Enabled = true; gradientElement.Offset = Vector2.new(0,0)
+        stroke.Parent = mainContainer; gradientElement.Parent = stroke
+        task.spawn(function()
+            local rotationSpeed = 30
+            while mainContainer and mainContainer.Parent do
+                task.wait(0.05)
+                gradientElement.Rotation = (gradientElement.Rotation + rotationSpeed * 0.05) % 360
+            end
+        end)
+    end
+end)
+
+task.spawn(function()
+    repeat task.wait(0.1) until Window.OpenButtonMain and Window.OpenButtonMain.Button
+    local button = Window.OpenButtonMain.Button
+    local stroke = button:FindFirstChildWhichIsA("UIStroke")
+    if stroke then
+        repeat task.wait(0.05) until stroke:FindFirstChildWhichIsA("UIGradient")
+        local grad = stroke:FindFirstChildWhichIsA("UIGradient")
+        if grad then
+            grad.Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, Capsule.DeepPurple),
+                ColorSequenceKeypoint.new(0.2, Capsule.Purple),
+                ColorSequenceKeypoint.new(0.4, Capsule.HotPink),
+                ColorSequenceKeypoint.new(0.6, Capsule.WarmOrange),
+                ColorSequenceKeypoint.new(0.8, Capsule.Cyan),
+                ColorSequenceKeypoint.new(1, Capsule.DeepPurple),
+            })
+            RunService.Heartbeat:Connect(function()
+                if grad and grad.Parent then grad.Rotation = (tick() * 50) % 360 end
+            end)
+        end
+    end
+end)
+
+task.spawn(function()
+    repeat task.wait() until Window.UIElements and Window.UIElements.Main
+    local mainFrame = Window.UIElements.Main
+    if mainFrame then
+        local topGlow = Instance.new("Frame")
+        topGlow.Name = "TopGlow"; topGlow.Size = UDim2.new(1,0,0.3,0); topGlow.Position = UDim2.new(0,0,0,0)
+        topGlow.BackgroundTransparency = 1; topGlow.ZIndex = 0; topGlow.Parent = mainFrame
+        local topGrad = Instance.new("UIGradient")
+        topGrad.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.new(0.48, 0.18, 0.96)),
+            ColorSequenceKeypoint.new(0.5, Color3.new(0.91, 0.19, 0.54)),
+            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 0)),
+        })
+        topGrad.Transparency = NumberSequence.new({
+            NumberSequenceKeypoint.new(0, 0.75),
+            NumberSequenceKeypoint.new(0.5, 0.88),
+            NumberSequenceKeypoint.new(1, 1),
+        })
+        topGrad.Rotation = 90; topGrad.Parent = topGlow
+
+        local bottomGlow = Instance.new("Frame")
+        bottomGlow.Name = "BottomGlow"; bottomGlow.Size = UDim2.new(1,0,0.25,0); bottomGlow.Position = UDim2.new(0,0,0.75,0)
+        bottomGlow.BackgroundTransparency = 1; bottomGlow.ZIndex = 0; bottomGlow.Parent = mainFrame
+        local bottomGrad = Instance.new("UIGradient")
+        bottomGrad.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.new(0, 0, 0)),
+            ColorSequenceKeypoint.new(0.4, Color3.new(0.98, 0.66, 0.15)),
+            ColorSequenceKeypoint.new(1, Color3.new(0.18, 0.82, 1)),
+        })
+        bottomGrad.Transparency = NumberSequence.new({
+            NumberSequenceKeypoint.new(0, 1),
+            NumberSequenceKeypoint.new(0.5, 0.85),
+            NumberSequenceKeypoint.new(1, 0.92),
+        })
+        bottomGrad.Rotation = 90; bottomGrad.Parent = bottomGlow
+    end
+end)
+
+local Tabs = {
+    GameTab = Window:Tab({ Title = "功能" }),
+}
+
+Tabs.GameTab:Section({ Title = "功能" })
+Tabs.GameTab:Toggle({ Title = "自动格挡，要保持ping100以内", Value = true, Callback = function(state) AutoParryEnabled = state end })
+Tabs.GameTab:Toggle({ Title = "AFK", Value = true, Callback = function(state) AntiAfkEnabled = state end })
+Tabs.GameTab:Paragraph({ Title = "实时统计", Desc = function() return "已成功格挡: "..parryCount.."\n当前游戏轮数: "..roundCount end })
