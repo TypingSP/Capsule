@@ -154,3 +154,7 @@ end)
 CreateButton("鸡场", 5, function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/TypingSP/Capsule/main/%E9%B8%A1%E5%9C%BA"))()
 end)
+
+CreateButton("谋杀决斗", 6, function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/TypingSP/Capsule/main/%E8%B0%8B%E6%9D%80%E5%86%B3%E6%96%97"))()
+end)
