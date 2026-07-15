@@ -1,0 +1,1080 @@
+local WindUI = loadstring(game:HttpGet(
+    "https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"
+))()
+
+local Capsule = {
+    DeepPurple   = Color3.fromHex("#1A0A2E"),
+    MidPurple    = Color3.fromHex("#3D1A78"),
+    Purple       = Color3.fromHex("#7B2FF7"),
+    HotPink      = Color3.fromHex("#E8308A"),
+    Coral        = Color3.fromHex("#FF6B6B"),
+    WarmOrange   = Color3.fromHex("#F9A826"),
+    Gold         = Color3.fromHex("#FFD93D"),
+    Cyan         = Color3.fromHex("#00D2FF"),
+    SoftPink     = Color3.fromHex("#FFB6D9"),
+    Lavender     = Color3.fromHex("#C084FC"),
+    DarkBg       = Color3.fromHex("#0D0015"),
+    White        = Color3.fromHex("#FFFFFF"),
+}
+
+local MarketplaceService = game:GetService("MarketplaceService")
+
+local function getPlaceName()
+    local ok, info = pcall(function()
+        return MarketplaceService:GetProductInfo(game.PlaceId)
+    end)
+    return (ok and info and info.Name) or game.Name
+end
+
+local placeName = getPlaceName()
+
+local function gradient(text, startColor, endColor)
+    local result = ""
+    local chars = {}
+    for uchar in text:gmatch("[%z\1-\127\194-\244][\128-\191]*") do
+        table.insert(chars, uchar)
+    end
+    local length = #chars
+    for i = 1, length do
+        local t = (i - 1) / math.max(length - 1, 1)
+        local r = startColor.R + (endColor.R - startColor.R) * t
+        local g = startColor.G + (endColor.G - startColor.G) * t
+        local b = startColor.B + (endColor.B - startColor.B) * t
+        result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>',
+            math.floor(r * 255), math.floor(g * 255), math.floor(b * 255), chars[i])
+    end
+    return result
+end
+
+local function gradient3(text, color1, color2, color3)
+    local result = ""
+    local chars = {}
+    for uchar in text:gmatch("[%z\1-\127\194-\244][\128-\191]*") do
+        table.insert(chars, uchar)
+    end
+    local length = #chars
+    for i = 1, length do
+        local t = (i - 1) / math.max(length - 1, 1)
+        local r, g, b
+        if t < 0.5 then
+            local s = t * 2
+            r = color1.R + (color2.R - color1.R) * s
+            g = color1.G + (color2.G - color1.G) * s
+            b = color1.B + (color2.B - color1.B) * s
+        else
+            local s = (t - 0.5) * 2
+            r = color2.R + (color3.R - color2.R) * s
+            g = color2.G + (color3.G - color2.G) * s
+            b = color2.B + (color3.B - color2.B) * s
+        end
+        result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>',
+            math.floor(r * 255), math.floor(g * 255), math.floor(b * 255), chars[i])
+    end
+    return result
+end
+
+local Window = WindUI:CreateWindow({
+    Title = gradient3("Capsule Sp", Capsule.DeepPurple, Capsule.HotPink, Capsule.WarmOrange),
+    Author = gradient3("Typing", Capsule.Cyan, Capsule.Purple, Capsule.HotPink),
+    Icon = "https://raw.githubusercontent.com/TypingSP/Capsule/main/1783909378391.png",
+    IconThemed = false,
+    Folder = "CloudHub",
+    Size = UDim2.fromOffset(320, 320),
+    Transparent = true,
+    Theme = "Dark",
+    SideBarWidth = 160,
+    HideSearchBar = false,
+    ScrollBarEnabled = true,
+    Background = "https://raw.githubusercontent.com/TypingSP/Capsule/main/share_1783905558267.jpeg",
+    BackgroundImageTransparency = 0.35,
+})
+
+Window:Tag({
+    Title = placeName,
+    Radius = 5,
+    Color = Capsule.Purple,
+})
+
+Window:EditOpenButton({
+    Title = "Capsule",
+    Icon = "https://raw.githubusercontent.com/TypingSP/Capsule/main/1783909378391.png",
+    CornerRadius = UDim.new(0, 8),
+    StrokeThickness = 2,
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Capsule.DeepPurple),
+        ColorSequenceKeypoint.new(0.25, Capsule.Purple),
+        ColorSequenceKeypoint.new(0.5, Capsule.HotPink),
+        ColorSequenceKeypoint.new(0.75, Capsule.WarmOrange),
+        ColorSequenceKeypoint.new(1, Capsule.DeepPurple),
+    }),
+    Draggable = true,
+})
+
+local borderEnabled = true
+local COLOR_SCHEMES = {
+    ["胶囊"] = {
+        type = "gradient",
+        colors = {
+            ColorSequenceKeypoint.new(0,    Capsule.DeepPurple),
+            ColorSequenceKeypoint.new(0.2,  Capsule.Purple),
+            ColorSequenceKeypoint.new(0.4,  Capsule.HotPink),
+            ColorSequenceKeypoint.new(0.6,  Capsule.WarmOrange),
+            ColorSequenceKeypoint.new(0.8,  Capsule.Cyan),
+            ColorSequenceKeypoint.new(1,    Capsule.DeepPurple),
+        }
+    }
+}
+local currentColorScheme = "胶囊"
+
+local function ensureBlurElement()
+    local mainFrame = Window.UIElements and Window.UIElements.Main
+    if not mainFrame then return end
+    local blur = mainFrame:FindFirstChild("Blur")
+    if not blur then
+        blur = Instance.new("ImageLabel")
+        blur.Name = "Blur"
+        blur.Size = UDim2.new(1, 0, 1, 0)
+        blur.Position = UDim2.new(0, 0, 0, 0)
+        blur.BackgroundTransparency = 1
+        blur.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+        blur.ImageTransparency = 0.15
+        blur.ZIndex = 0
+        blur.Parent = mainFrame
+    end
+    return blur
+end
+
+local function getColorSequenceForScheme(scheme)
+    local data = COLOR_SCHEMES[scheme]
+    if data.type == "gradient" then
+        return data.colors
+    end
+    return ColorSequence.new(Capsule.Purple)
+end
+
+local function applyBorderColor(c, colorSeq, e)
+    e = e or 0.15
+    local f = c.UIElements and c.UIElements.Main or c.Frame or c.Gui or c
+    if not f then return false end
+    local g = f:FindFirstChild("Blur", true)
+    if g and g:IsA("ImageLabel") then
+        g.ImageColor3 = Capsule.Purple
+        g.ImageTransparency = e
+        local existingGrad = g:FindFirstChild("CapsuleBorderGrad")
+        if not existingGrad then
+            existingGrad = Instance.new("UIGradient")
+            existingGrad.Name = "CapsuleBorderGrad"
+            existingGrad.Color = ColorSequence.new(colorSeq)
+            existingGrad.Rotation = 0
+            existingGrad.Parent = g
+        else
+            existingGrad.Color = ColorSequence.new(colorSeq)
+        end
+        return true
+    end
+    local h = f:FindFirstChild("Shadow", true)
+    if h and h:IsA("ImageLabel") then
+        h.ImageColor3 = Capsule.Purple
+        h.ImageTransparency = e
+        return true
+    end
+    return false
+end
+
+local borderConnection = nil
+local borderRotation = 0
+
+local function startBorderAnimation()
+    if borderConnection then
+        borderConnection:Disconnect()
+        borderConnection = nil
+    end
+    if not borderEnabled then return end
+    ensureBlurElement()
+    borderConnection = game:GetService("RunService").Heartbeat:Connect(function(delta)
+        local mainFrame = Window.UIElements and Window.UIElements.Main
+        if not mainFrame or not mainFrame.Visible then return end
+        borderRotation = (borderRotation + 25 * delta) % 360
+        local colorSeq = getColorSequenceForScheme(currentColorScheme)
+        applyBorderColor(Window, colorSeq, 0.15)
+        local blur = mainFrame:FindFirstChild("Blur", true)
+        if blur then
+            local grad = blur:FindFirstChild("CapsuleBorderGrad")
+            if grad then
+                grad.Rotation = borderRotation
+            end
+        end
+    end)
+end
+
+local function stopBorderAnimation()
+    if borderConnection then
+        borderConnection:Disconnect()
+        borderConnection = nil
+    end
+end
+
+local function setupVisibilityListener()
+    local mainFrame = Window.UIElements and Window.UIElements.Main
+    if not mainFrame then
+        task.spawn(function()
+            repeat task.wait() until Window.UIElements and Window.UIElements.Main
+            setupVisibilityListener()
+        end)
+        return
+    end
+    if mainFrame.Visible and borderEnabled then
+        startBorderAnimation()
+    elseif not mainFrame.Visible then
+        stopBorderAnimation()
+    end
+    mainFrame:GetPropertyChangedSignal("Visible"):Connect(function()
+        if mainFrame.Visible and borderEnabled then
+            startBorderAnimation()
+        else
+            stopBorderAnimation()
+        end
+    end)
+end
+
+setupVisibilityListener()
+Window:OnClose(function()
+    stopBorderAnimation()
+end)
+
+task.spawn(function()
+    repeat task.wait() until Window.UIElements and Window.UIElements.Main
+    local mainContainer = Window.UIElements.Main
+    if mainContainer then
+        local stroke = Instance.new("UIStroke")
+        stroke.Name = "CapsuleStroke"
+        stroke.Thickness = 2
+        stroke.Color = Capsule.Purple
+        stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        stroke.Transparency = 0.3
+
+        local gradientElement = Instance.new("UIGradient")
+        gradientElement.Name = "CapsuleGradient"
+        gradientElement.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0,    Capsule.DeepPurple),
+            ColorSequenceKeypoint.new(0.17, Capsule.Purple),
+            ColorSequenceKeypoint.new(0.33, Capsule.HotPink),
+            ColorSequenceKeypoint.new(0.5,  Capsule.WarmOrange),
+            ColorSequenceKeypoint.new(0.67, Capsule.Cyan),
+            ColorSequenceKeypoint.new(0.83, Capsule.Lavender),
+            ColorSequenceKeypoint.new(1,    Capsule.DeepPurple),
+        })
+        gradientElement.Enabled = true
+        gradientElement.Offset = Vector2.new(0, 0)
+
+        stroke.Parent = mainContainer
+        gradientElement.Parent = stroke
+
+        task.spawn(function()
+            local rotationSpeed = 30
+            while mainContainer and mainContainer.Parent do
+                task.wait(0.05)
+                gradientElement.Rotation = (gradientElement.Rotation + rotationSpeed * 0.05) % 360
+            end
+        end)
+    end
+end)
+
+task.spawn(function()
+    repeat
+        task.wait(0.1)
+    until Window.OpenButtonMain and Window.OpenButtonMain.Button
+    local button = Window.OpenButtonMain.Button
+    local stroke = button:FindFirstChildWhichIsA("UIStroke")
+    if not stroke then
+        return
+    end
+    repeat
+        task.wait(0.05)
+    until stroke:FindFirstChildWhichIsA("UIGradient")
+    local grad = stroke:FindFirstChildWhichIsA("UIGradient")
+    if not grad then
+        return
+    end
+
+    grad.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0,    Capsule.DeepPurple),
+        ColorSequenceKeypoint.new(0.2,  Capsule.Purple),
+        ColorSequenceKeypoint.new(0.4,  Capsule.HotPink),
+        ColorSequenceKeypoint.new(0.6,  Capsule.WarmOrange),
+        ColorSequenceKeypoint.new(0.8,  Capsule.Cyan),
+        ColorSequenceKeypoint.new(1,    Capsule.DeepPurple),
+    })
+
+    game:GetService("RunService").Heartbeat:Connect(function()
+        if not grad or not grad.Parent then
+            return
+        end
+        local t = tick() * 50
+        grad.Rotation = t % 360
+    end)
+end)
+
+task.spawn(function()
+    repeat task.wait() until Window.UIElements and Window.UIElements.Main
+    local mainFrame = Window.UIElements.Main
+    if not mainFrame then return end
+
+    local topGlow = Instance.new("Frame")
+    topGlow.Name = "TopGlow"
+    topGlow.Size = UDim2.new(1, 0, 0.3, 0)
+    topGlow.Position = UDim2.new(0, 0, 0, 0)
+    topGlow.BackgroundTransparency = 1
+    topGlow.ZIndex = 0
+    topGlow.Parent = mainFrame
+
+    local topGrad = Instance.new("UIGradient")
+    topGrad.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.new(0.48, 0.18, 0.96)),
+        ColorSequenceKeypoint.new(0.5, Color3.new(0.91, 0.19, 0.54)),
+        ColorSequenceKeypoint.new(1, Color3.new(0, 0, 0)),
+    })
+    topGrad.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0.75),
+        NumberSequenceKeypoint.new(0.5, 0.88),
+        NumberSequenceKeypoint.new(1, 1),
+    })
+    topGrad.Rotation = 90
+    topGrad.Parent = topGlow
+
+    local bottomGlow = Instance.new("Frame")
+    bottomGlow.Name = "BottomGlow"
+    bottomGlow.Size = UDim2.new(1, 0, 0.25, 0)
+    bottomGlow.Position = UDim2.new(0, 0, 0.75, 0)
+    bottomGlow.BackgroundTransparency = 1
+    bottomGlow.ZIndex = 0
+    bottomGlow.Parent = mainFrame
+
+    local bottomGrad = Instance.new("UIGradient")
+    bottomGrad.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.new(0, 0, 0)),
+        ColorSequenceKeypoint.new(0.4, Color3.new(0.98, 0.66, 0.15)),
+        ColorSequenceKeypoint.new(1, Color3.new(0.18, 0.82, 1)),
+    })
+    bottomGrad.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 1),
+        NumberSequenceKeypoint.new(0.5, 0.85),
+        NumberSequenceKeypoint.new(1, 0.92),
+    })
+    bottomGrad.Rotation = 90
+    bottomGrad.Parent = bottomGlow
+end)
+
+local Tabs = {
+    FishingTab = Window:Tab({ Title = "钓鱼", Icon = "fish" }),
+    MiscTab = Window:Tab({ Title = "杂项", Icon = "fish" }),
+    AFKTab = Window:Tab({ Title = "挂机", Icon = "fish" }),
+    CharacterTab = Window:Tab({ Title = "人物", Icon = "fish" }),
+    FunTab = Window:Tab({ Title = "娱乐", Icon = "fish" }),
+    TeleportTab = Window:Tab({ Title = "传送", Icon = "map-pin" }),
+}
+
+Window:SelectTab(1)
+
+_G.AutoFishingEnabled = false
+_G.AutoCastEnabled = false
+_G.AutoSkillEnabled = false
+_G.AutoSellEnabled = false
+_G.AutoTeleToBoss = false
+_G.AutoSkillF = false
+_G.SkillFDelay = 5
+_G.AutoFavoriteRareFish = false
+_G.AutoTicketQuest = false
+_G.AutoBuyAncestralBait = false
+_G.AutoWeatherFarm = false
+_G.AutoNormalTicketQuest = false
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
+local Events = ReplicatedStorage:WaitForChild("Events")
+
+MiscTab:Button({
+    Title = "换服",
+    Callback = function()
+        local TeleportService = game:GetService("TeleportService")
+        local HttpService = game:GetService("HttpService")
+        local PlaceId = game.PlaceId
+        local JobId = game.JobId
+        local url = "https://games.roblox.com/v1/games/" .. PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
+        local success, response = pcall(function()
+            return game:HttpGet(url)
+        end)
+        if success then
+            local data = HttpService:JSONDecode(response)
+            for _, server in ipairs(data.data) do
+                if server.playing < server.maxPlayers and server.id ~= JobId then
+                    TeleportService:TeleportToPlaceInstance(PlaceId, server.id, LocalPlayer)
+                    break
+                end
+            end
+        end
+    end
+})
+
+FishingTab:Button({
+    Title = "打开饵料商城",
+    Callback = function()
+        pcall(function()
+            Events.ChooseDialogueOption:FireServer("BuyBait", 1, "BaitShop", nil)
+        end)
+    end
+})
+
+MiscTab:Button({
+    Title = "打开饵料制作",
+    Callback = function()
+        pcall(function()
+            Events.ChooseDialogueOption:FireServer("BuyBait", 2, "CraftBait", nil)
+        end)
+    end
+})
+
+FishingTab:Toggle({
+    Title = "自动抛竿",
+    Value = false,
+    Callback = function(state) _G.AutoCastEnabled = state end
+})
+
+FishingTab:Toggle({
+    Title = "自动钓鱼",
+    Value = false,
+    Callback = function(state) _G.AutoFishingEnabled = state end
+})
+
+FishingTab:Toggle({
+    Title = "自动技能",
+    Value = false,
+    Callback = function(state) _G.AutoSkillEnabled = state end
+})
+
+FishingTab:Paragraph({
+    Title = "注意事项",
+    Desc = "开启过滤之后只钓boss，如果不是boss则自动放弃(暂时用不了在维护)",
+    Color = "Red"
+})
+
+local AutoFishEnabled = false
+local KeepFish = {
+    ["Rainbow Dragonfish"] = true,
+    ["Sanguine Fish"] = true,
+    ["Heavenpiercer Turtle"] = true,
+    ["Reborn Puffer Beast"] = true,
+    ["Flying Fish Empress"] = true,
+    ["Flying Fish Emperor"] = true,
+    ["Draconic Koi"] = true,
+    ["Elder Scarlet Fish"] = true,
+    ["Verdant Bonefang"] = true,
+    ["Scarlet Fish"] = true,
+    ["Crimson Electric Eel"] = true,
+    ["Colossal Tigerfish"] = true,
+    ["Ascended Perch"] = true,
+    ["Warbringer Shark"] = true,
+    ["Frost Kingfish"] = true,
+    ["Crimson Bonefang"] = true,
+    ["Primordial Kunfish Overlord"] = true
+}
+local processedFish = setmetatable({}, {__mode = "k"})
+local ToggleHotbarEvent = Events.ToggleHotbar
+
+FishingTab:Toggle({
+    Title = "自动过滤小鱼",
+    Value = false,
+    Locked = true,
+    Callback = function(state)
+        AutoFishEnabled = state
+    end
+})
+
+_G.BossLockMode = false
+
+FishingTab:Toggle({
+    Title = "抢Boss",
+    Desc = "开了这个功能之后 自动功能不能用否则会冲突",
+    Value = false,
+    Callback = function(state)
+        _G.BossLockMode = state
+        if not state then
+            _G.AutoFishingEnabled = false
+            _G.AutoCastEnabled = false
+            _G.AutoSkillEnabled = false
+        end
+    end
+})
+
+task.spawn(function()
+    local wasBossDetected = false
+    while true do
+        task.wait(0.01)
+        if _G.BossLockMode then
+            local ocean = workspace:FindFirstChild("Ocean")
+            local boss = ocean and ocean:FindFirstChild("Boss")
+            local char = LocalPlayer.Character
+            local hrp = char and char:FindFirstChild("HumanoidRootPart")
+            if boss and hrp then
+                local bossPivot = boss:GetPivot()
+                local bossPos = bossPivot.Position
+                local direction = (hrp.Position - bossPos).Magnitude > 0.1 and (hrp.Position - bossPos).Unit or Vector3.new(1, 0, 0)
+                local targetPos = bossPos + (direction * 20) + Vector3.new(0, 10, 0)
+                char:PivotTo(CFrame.lookAt(targetPos, bossPos))
+                if not wasBossDetected then
+                    _G.AutoFishingEnabled = true
+                    _G.AutoSkillEnabled = true
+                    _G.AutoCastEnabled = true
+                    wasBossDetected = true
+                end
+            else
+                if wasBossDetected then
+                    _G.AutoFishingEnabled = false
+                    _G.AutoCastEnabled = false
+                    _G.AutoSkillEnabled = false
+                    wasBossDetected = false
+                end
+            end
+        end
+    end
+end)
+
+local AutoWeatherTP = false
+local Islands = {
+    Bass = { Pos = Vector3.new(-62.20, 9.28, -1350.26), Look = Vector3.new(0.00873366, 0, -0.99996185) },
+    Bamboo = { Pos = Vector3.new(-1292.66, 9.76, -42.57), Look = Vector3.new(-0.99991846, 0, 0.01276829) },
+    Coconut = { Pos = Vector3.new(1413.75, 9.28, -1452.20), Look = Vector3.new(-0.03845364, 0, 0.99926036) }
+}
+
+local function TeleportTo(data)
+    local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local hrp = char:WaitForChild("HumanoidRootPart")
+    hrp.CFrame = CFrame.new(data.Pos, data.Pos + data.Look)
+end
+
+local function GetCurrentWeather()
+    local WeatherFolder = ReplicatedStorage.ClientModule.Weather.Weather
+    local currentSky = game.Lighting:FindFirstChildOfClass("Sky")
+    if not currentSky then return nil end
+    for _, weather in pairs(WeatherFolder:GetChildren()) do
+        local sky = weather:FindFirstChild("Sky")
+        if sky and sky.SkyboxBk == currentSky.SkyboxBk then
+            return weather.Name
+        end
+    end
+    return nil
+end
+
+local function CreateWeatherUI()
+    local playerGui = LocalPlayer:WaitForChild("PlayerGui")
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "WeatherUI"
+    screenGui.Parent = playerGui
+    screenGui.ResetOnSpawn = false
+
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 200, 0, 40)
+    frame.Position = UDim2.new(1, -210, 0, 10)
+    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+    frame.BorderSizePixel = 0
+    frame.BackgroundTransparency = 0.3
+    frame.Parent = screenGui
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textLabel.Font = Enum.Font.SourceSansBold
+    textLabel.TextSize = 20
+    textLabel.Text = "当前天气: -"
+    textLabel.Parent = frame
+
+    return frame, textLabel
+end
+
+local WeatherFrame, WeatherTextLabel = CreateWeatherUI()
+
+local function UpdateWeatherUI(weather)
+    if WeatherTextLabel and WeatherFrame then
+        if weather then
+            WeatherTextLabel.Text = "当前天气: " .. weather
+        else
+            WeatherTextLabel.Text = "当前天气: 未知"
+        end
+        local colorMap = {
+            Foggy = Color3.fromRGB(150, 150, 150),
+            Thunderstorm = Color3.fromRGB(30, 30, 80),
+            Windy = Color3.fromRGB(100, 150, 255),
+            Clear = Color3.fromRGB(255, 200, 50)
+        }
+        WeatherFrame.BackgroundColor3 = colorMap[weather] or Color3.fromRGB(40, 40, 40)
+    end
+end
+
+FishingTab:Toggle({
+    Title = "自动天气传送",
+    Value = false,
+    Callback = function(state)
+        AutoWeatherTP = state
+        if state then
+            task.spawn(function()
+                local lastWeather = ""
+                while AutoWeatherTP do
+                    local weather = GetCurrentWeather()
+                    UpdateWeatherUI(weather)
+                    if weather ~= lastWeather then
+                        lastWeather = weather
+                        if weather == "Foggy" then
+                            TeleportTo(Islands.Coconut)
+                        elseif weather == "Thunderstorm" then
+                            TeleportTo(Islands.Bamboo)
+                        elseif weather == "Windy" or weather == "Clear" then
+                            TeleportTo(Islands.Bass)
+                        end
+                    end
+                    task.wait(2)
+                end
+            end)
+        end
+    end
+})
+
+FishingTab:Toggle({
+    Title = "杆门断自动释放",
+    Value = false,
+    Callback = function(state) _G.AutoSkillF = state end
+})
+
+FishingTab:Input({
+    Title = "杆门断释放延时时间",
+    Placeholder = "默认30秒",
+    Value = "30",
+    Callback = function(text)
+        local num = tonumber(text)
+        if num and num >= 0 then
+            _G.SkillFDelay = num
+        end
+    end
+})
+
+FishingTab:Toggle({
+    Title = "自动卖鱼",
+    Value = false,
+    Callback = function(state) _G.AutoSellEnabled = state end
+})
+
+MiscTab:Toggle({
+    Title = "自动传送Boss",
+    Value = false,
+    Callback = function(state) _G.AutoTeleToBoss = state end
+})
+
+MiscTab:Toggle({
+    Title = "自动收藏稀有鱼",
+    Value = false,
+    Callback = function(state) _G.AutoFavoriteRareFish = state end
+})
+
+MiscTab:Paragraph({
+    Title = "注意事项",
+    Desc = "自动接刘老板任务接完以后，挂机把所有刘老板任务做完，然后在认领任务",
+    Color = "Red"
+})
+
+MiscTab:Toggle({
+    Title = "自动接刘老板困难任务",
+    Value = false,
+    Callback = function(state) _G.AutoTicketQuest = state end
+})
+
+MiscTab:Toggle({
+    Title = "自动认领刘老板任务",
+    Value = false,
+    Callback = function(state) _G.AutoNormalTicketQuest = state end
+})
+
+MiscTab:Toggle({
+    Title = "自动购买祖先饵料",
+    Value = false,
+    Callback = function(state) _G.AutoBuyAncestralBait = state end
+})
+
+local autoDeleteAFK = false
+AFKTab:Toggle({
+    Title = "阻止自动换服",
+    Value = false,
+    Callback = function(state)
+        autoDeleteAFK = state
+        if state then
+            local searchAreas = {LocalPlayer, workspace, ReplicatedStorage, game:GetService("Lighting")}
+            local function wipeAFK()
+                local count = 0
+                for _, area in ipairs(searchAreas) do
+                    pcall(function()
+                        for _, obj in ipairs(area:GetDescendants()) do
+                            if obj.Name == "AFK" or string.match(string.upper(obj.Name), "^AFK$") then
+                                pcall(function()
+                                    if obj:IsA("LocalScript") or obj:IsA("ModuleScript") then
+                                        obj.Disabled = true
+                                    end
+                                    obj:Destroy()
+                                    count = count + 1
+                                end)
+                            end
+                        end
+                    end)
+                end
+                return count
+            end
+            local initialCount = wipeAFK()
+            task.spawn(function()
+                while autoDeleteAFK do
+                    task.wait(1.5)
+                    wipeAFK()
+                end
+            end)
+        end
+    end
+})
+
+local bypassCount = 0
+local afkConnection = nil
+AFKTab:Toggle({
+    Title = "AFK(必开)",
+    Value = false,
+    Callback = function(state)
+        if state then
+            bypassCount = 0
+            afkConnection = LocalPlayer.Idled:Connect(function()
+                game:GetService("VirtualUser"):CaptureController()
+                game:GetService("VirtualUser"):ClickButton2(Vector2.new(0, 0))
+                bypassCount = bypassCount + 1
+            end)
+        else
+            if afkConnection then afkConnection:Disconnect() afkConnection = nil end
+        end
+    end
+})
+
+MiscTab:Toggle({
+    Title = "自动传送小道士",
+    Value = false,
+    Callback = function(state) _G.AutoTeleToMerchant = state end
+})
+
+local isSpeedEnabled = false
+local speedValue = 50
+
+CharacterTab:Toggle({
+    Title = "加速",
+    Value = false,
+    Callback = function(state)
+        isSpeedEnabled = state
+        if not state and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+            LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        end
+    end
+})
+
+CharacterTab:Slider({
+    Title = "移动速度",
+    Value = { Min = 16, Max = 200, Default = 50 },
+    Callback = function(value)
+        speedValue = value
+        if isSpeedEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+            LocalPlayer.Character.Humanoid.WalkSpeed = speedValue
+        end
+    end
+})
+
+getgenv().AttachSpirit = false
+FunTab:Toggle({
+    Title = "获取饮料的老婆",
+    Value = false,
+    Callback = function(state) getgenv().AttachSpirit = state end
+})
+
+RunService.Heartbeat:Connect(function()
+    if not getgenv().AttachSpirit then return end
+    local char = LocalPlayer.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+    local spirit = workspace:FindFirstChild("NPC") and workspace.NPC:FindFirstChild("Spirit")
+    if spirit then
+        if spirit:IsA("Model") and not spirit.PrimaryPart then
+            spirit.PrimaryPart = spirit:FindFirstChildWhichIsA("BasePart")
+        end
+        spirit:PivotTo(char.HumanoidRootPart.CFrame * CFrame.new(0, 5, 4))
+    end
+end)
+
+local function TeleportToCoords(coords)
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(coords)
+    end
+end
+
+local locations = {
+    {Name = "初始岛屿", Coords = Vector3.new(-283.78, 11.06, 37.06)},
+    {Name = "竹子岛", Coords = Vector3.new(-1194.62, 5.57, -30.08)},
+    {Name = "核弹岛", Coords = Vector3.new(-48.12, 5.88, 1234.68)},
+    {Name = "主权岛屿", Coords = Vector3.new(-1174.37, 7.26, 1279.27)},
+    {Name = "鲈鱼岛", Coords = Vector3.new(-63.82, 11.11, -1361.63)},
+    {Name = "冰霜岛屿", Coords = Vector3.new(-1389.85, 9.50, -1397.23)},
+    {Name = "椰子岛", Coords = Vector3.new(1431.24, 11.14, -1445.49)},
+    {Name = "琥珀岛", Coords = Vector3.new(1123.59, 10.86, 1414.99)},
+    {Name = "战场岛", Coords = Vector3.new(1342.56, 9.64, 229.71)}
+}
+
+for _, loc in ipairs(locations) do
+    TeleportTab:Button({
+        Title = "传送至: " .. loc.Name,
+        Callback = function() TeleportToCoords(loc.Coords) end
+    })
+end
+
+task.spawn(function()
+    while true do
+        if _G.AutoTeleToBoss then
+            pcall(function()
+                local boss = workspace:FindFirstChild("Ocean") and workspace.Ocean:FindFirstChild("Boss")
+                if boss and LocalPlayer.Character then
+                    LocalPlayer.Character:PivotTo(boss:GetPivot() * CFrame.new(0, 5, 0))
+                end
+            end)
+        end
+        task.wait(0.5)
+    end
+end)
+
+task.spawn(function()
+    while true do
+        task.wait(1)
+        if _G.AutoCastEnabled and not workspace:FindFirstChild(LocalPlayer.Name):FindFirstChild("Buoy") then
+            Events.Fishing:FireServer()
+        end
+    end
+end)
+
+task.spawn(function()
+    local isPlaying = false
+    Events.FishingMinigame.OnClientEvent:Connect(function()
+        if _G.AutoFishingEnabled then isPlaying = true end
+    end)
+
+    Events.Slam.OnClientEvent:Connect(function()
+        if _G.AutoFishingEnabled then
+            pcall(function()
+                LocalPlayer.PlayerGui.MainGui.Fishing.TrashCan.Slam.Button.MouseButton1Click:Fire()
+            end)
+        end
+    end)
+
+    Events.Charge.OnClientEvent:Connect(function()
+        if _G.AutoFishingEnabled then
+            pcall(function()
+                LocalPlayer.PlayerGui.MainGui.Fishing.TrashCan.Charge.Button.MouseButton1Click:Fire()
+            end)
+        end
+    end)
+
+    while true do
+        task.wait()
+        if _G.AutoFishingEnabled and isPlaying then
+            pcall(function()
+                local fishingGui = LocalPlayer.PlayerGui.MainGui.Fishing
+                if fishingGui and fishingGui.Visible then
+                    fishingGui.BarFrame.Bar.Position = UDim2.new(0.5, 0, 0.5, 0)
+                else
+                    isPlaying = false
+                end
+            end)
+        end
+    end
+end)
+
+task.spawn(function()
+    local UseSkillEvent = Events:WaitForChild("UseSkill")
+    local keys = {"Z", "C", "V", "X"}
+    while true do
+        if _G.AutoSkillEnabled then
+            for _, key in ipairs(keys) do
+                UseSkillEvent:FireServer(key)
+            end
+        end
+        task.wait(0.1)
+    end
+end)
+
+task.spawn(function()
+    getgenv().AutoFavoriteFish = getgenv().AutoFavoriteFish or {}
+    local inventory = ReplicatedStorage:WaitForChild("Data"):WaitForChild(tostring(LocalPlayer.UserId)):WaitForChild("Inventory")
+    local FavoriteEvent = Events:WaitForChild("FavoriteItem")
+
+    local TargetFish = {
+        ["Rainbow Dragonfish"] = true,
+        ["Sanguine Fish"] = true,
+        ["Heavenpiercer Turtle"] = true,
+        ["Reborn Puffer Beast"] = true,
+        ["Flying Fish Empress"] = true,
+        ["Flying Fish Emperor"] = true,
+        ["Draconic Koi"] = true,
+        ["Elder Scarlet Fish"] = true,
+        ["Verdant Bonefang"] = true,
+        ["Scarlet Fish"] = true,
+        ["Crimson Electric Eel"] = true,
+        ["Colossal Tigerfish"] = true,
+        ["Ascended Perch"] = true,
+        ["Warbringer Shark"] = true,
+        ["Frost Kingfish"] = true,
+        ["Crimson Bonefang"] = true,
+        ["Primordial Kunfish Overlord"] = true
+    }
+
+    local function AutoFavorite(fish)
+        if not _G.AutoFavoriteRareFish then return end
+        if not fish or not fish.Name then return end
+        local fullName = fish.Name
+        local fishType = string.match(fullName, "^(.-)%s*|") or fullName
+        fishType = fishType:gsub("%s+$", "")
+        if not TargetFish[fishType] then return end
+        if getgenv().AutoFavoriteFish[fullName] then return end
+        getgenv().AutoFavoriteFish[fullName] = true
+        task.wait(0.2)
+        pcall(function() FavoriteEvent:FireServer(fullName) end)
+    end
+
+    inventory.ChildAdded:Connect(function(fish)
+        task.spawn(function() AutoFavorite(fish) end)
+    end)
+end)
+
+task.spawn(function()
+    local inventory = ReplicatedStorage:WaitForChild("Data"):WaitForChild(tostring(LocalPlayer.UserId)):WaitForChild("Inventory")
+    local SellEvent = Events:WaitForChild("SellFish")
+    getgenv().AutoFavoriteFish = getgenv().AutoFavoriteFish or {}
+    while true do
+        if _G.AutoSellEnabled then
+            for _, fish in ipairs(inventory:GetChildren()) do
+                if not getgenv().AutoFavoriteFish[fish.Name] then
+                    pcall(function()
+                        SellEvent:FireServer(fish.Name)
+                    end)
+                end
+            end
+        end
+        task.wait(10)
+    end
+end)
+
+task.spawn(function()
+    while true do
+        task.wait(0.5)
+        if isSpeedEnabled then
+            local char = LocalPlayer.Character
+            if char and char:FindFirstChild("Humanoid") and char.Humanoid.WalkSpeed ~= speedValue then
+                char.Humanoid.WalkSpeed = speedValue
+            end
+        end
+    end
+end)
+
+task.spawn(function()
+    local VirtualInputManager = game:GetService("VirtualInputManager")
+    local TARGET_ANIMATIONS = {
+        "rbxassetid://139310377090355",
+        "rbxassetid://126829237727532",
+        "rbxassetid://93648246978510"
+    }
+    local busy = false
+    local function HookCharacter(character)
+        local humanoid = character:WaitForChild("Humanoid")
+        humanoid.AnimationPlayed:Connect(function(track)
+            local anim = track.Animation
+            if not _G.AutoSkillF then return end
+            if busy then return end
+            if not anim then return end
+            local matched = false
+            for _, id in ipairs(TARGET_ANIMATIONS) do
+                if anim.AnimationId == id then
+                    matched = true
+                    break
+                end
+            end
+            if matched then
+                busy = true
+                task.delay(_G.SkillFDelay, function()
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
+                    task.wait(0.05)
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
+                    task.wait(1)
+                    busy = false
+                end)
+            end
+        end)
+    end
+    if LocalPlayer.Character then HookCharacter(LocalPlayer.Character) end
+    LocalPlayer.CharacterAdded:Connect(HookCharacter)
+end)
+
+task.spawn(function()
+    while true do
+        if _G.AutoTicketQuest then
+            pcall(function()
+                Events.ChooseDialogueOption:FireServer(
+                    "Ticket Quest Giver",
+                    2,
+                    "HardAcceptQuest",
+                    {workspace.NPC.Function["Ticket Quest Giver"], "Ticket Quest"}
+                )
+            end)
+        end
+        task.wait(3)
+    end
+end)
+
+task.spawn(function()
+    while true do
+        if _G.AutoBuyAncestralBait then
+            pcall(function()
+                Events.BuyBait:FireServer("Ancestral Bait")
+            end)
+        end
+        task.wait(0.1)
+    end
+end)
+
+task.spawn(function()
+    while true do
+        if _G.AutoNormalTicketQuest then
+            pcall(function()
+                Events.ChooseDialogueOption:FireServer(
+                    "Ticket Quest Giver",
+                    1,
+                    "Quest",
+                    {workspace.NPC.Function["Ticket Quest Giver"]}
+                )
+            end)
+        end
+        task.wait(3)
+    end
+end)
+
+task.spawn(function()
+    while true do
+        task.wait(0.5)
+        if _G.AutoTeleToMerchant then
+            local char = LocalPlayer.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local npcFolder = workspace:FindFirstChild("NPC")
+                if npcFolder then
+                    local merchant = npcFolder:FindFirstChild("Merchant", true)
+                    if merchant and merchant:IsA("Model") then
+                        char:PivotTo(merchant:GetPivot() * CFrame.new(0, 0, -3))
+                    end
+                end
+            end
+        end
+    end
+end)
