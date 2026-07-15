@@ -28,7 +28,7 @@ end
 
 local placeName = getPlaceName()
 
-local function gradient(text, startColor, endColor)
+function gradient(text, startColor, endColor)
     local result = ""
     local chars = {}
     for uchar in text:gmatch("[%z\1-\127\194-\244][\128-\191]*") do
@@ -46,7 +46,7 @@ local function gradient(text, startColor, endColor)
     return result
 end
 
-local function gradient3(text, color1, color2, color3)
+function gradient3(text, color1, color2, color3)
     local result = ""
     local chars = {}
     for uchar in text:gmatch("[%z\1-\127\194-\244][\128-\191]*") do
@@ -90,7 +90,7 @@ local Window = WindUI:CreateWindow({
 })
 
 Window:Tag({
-    Title = placeName,
+    Title = placeName .. " - 重型钓鱼",
     Radius = 5,
     Color = Capsule.Purple,
 })
@@ -365,14 +365,12 @@ task.spawn(function()
     bottomGrad.Parent = bottomGlow
 end)
 
-local Tabs = {
-    FishingTab = Window:Tab({ Title = "钓鱼", Icon = "fish" }),
-    MiscTab = Window:Tab({ Title = "杂项", Icon = "fish" }),
-    AFKTab = Window:Tab({ Title = "挂机", Icon = "fish" }),
-    CharacterTab = Window:Tab({ Title = "人物", Icon = "fish" }),
-    FunTab = Window:Tab({ Title = "娱乐", Icon = "fish" }),
-    TeleportTab = Window:Tab({ Title = "传送", Icon = "map-pin" }),
-}
+local FishingTab = Window:Tab({ Title = "钓鱼", Icon = "fish" })
+local MiscTab = Window:Tab({ Title = "杂项", Icon = "fish" })
+local AFKTab = Window:Tab({ Title = "挂机", Icon = "fish" })
+local CharacterTab = Window:Tab({ Title = "人物", Icon = "fish" })
+local FunTab = Window:Tab({ Title = "娱乐", Icon = "fish" })
+local TeleportTab = Window:Tab({ Title = "传送", Icon = "map-pin" })
 
 Window:SelectTab(1)
 
@@ -395,43 +393,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local Events = ReplicatedStorage:WaitForChild("Events")
 
-MiscTab:Button({
-    Title = "换服",
-    Callback = function()
-        local TeleportService = game:GetService("TeleportService")
-        local HttpService = game:GetService("HttpService")
-        local PlaceId = game.PlaceId
-        local JobId = game.JobId
-        local url = "https://games.roblox.com/v1/games/" .. PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
-        local success, response = pcall(function()
-            return game:HttpGet(url)
-        end)
-        if success then
-            local data = HttpService:JSONDecode(response)
-            for _, server in ipairs(data.data) do
-                if server.playing < server.maxPlayers and server.id ~= JobId then
-                    TeleportService:TeleportToPlaceInstance(PlaceId, server.id, LocalPlayer)
-                    break
-                end
-            end
-        end
-    end
-})
+FishingTab:Section({ Title = "钓鱼自动化" })
 
 FishingTab:Button({
     Title = "打开饵料商城",
     Callback = function()
         pcall(function()
             Events.ChooseDialogueOption:FireServer("BuyBait", 1, "BaitShop", nil)
-        end)
-    end
-})
-
-MiscTab:Button({
-    Title = "打开饵料制作",
-    Callback = function()
-        pcall(function()
-            Events.ChooseDialogueOption:FireServer("BuyBait", 2, "CraftBait", nil)
         end)
     end
 })
@@ -453,6 +421,8 @@ FishingTab:Toggle({
     Value = false,
     Callback = function(state) _G.AutoSkillEnabled = state end
 })
+
+FishingTab:Section({ Title = "过滤与Boss" })
 
 FishingTab:Paragraph({
     Title = "注意事项",
@@ -477,6 +447,7 @@ local KeepFish = {
     ["Ascended Perch"] = true,
     ["Warbringer Shark"] = true,
     ["Frost Kingfish"] = true,
+    ["Verdant Bonefang"] = true,
     ["Crimson Bonefang"] = true,
     ["Primordial Kunfish Overlord"] = true
 }
@@ -491,6 +462,32 @@ FishingTab:Toggle({
         AutoFishEnabled = state
     end
 })
+
+task.spawn(function()
+    while true do
+        task.wait(1.5)
+        if AutoFishEnabled then
+            for _, v in pairs(getgc(true)) do
+                if type(v) == "table" then
+                    local name = rawget(v, "FishName")
+                    if name and rawget(v, "Weight") and rawget(v, "Power") then
+                        if not processedFish[v] then
+                            processedFish[v] = true
+                            local fishName = tostring(name)
+                            if not KeepFish[fishName] then
+                                pcall(function()
+                                    ToggleHotbarEvent:InvokeServer("1", nil)
+                                    task.wait(0.1)
+                                    ToggleHotbarEvent:InvokeServer("1", nil)
+                                end)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
 
 _G.BossLockMode = false
 
@@ -523,6 +520,7 @@ task.spawn(function()
                 local direction = (hrp.Position - bossPos).Magnitude > 0.1 and (hrp.Position - bossPos).Unit or Vector3.new(1, 0, 0)
                 local targetPos = bossPos + (direction * 20) + Vector3.new(0, 10, 0)
                 char:PivotTo(CFrame.lookAt(targetPos, bossPos))
+
                 if not wasBossDetected then
                     _G.AutoFishingEnabled = true
                     _G.AutoSkillEnabled = true
@@ -540,6 +538,8 @@ task.spawn(function()
         end
     end
 end)
+
+FishingTab:Section({ Title = "天气与技能" })
 
 local AutoWeatherTP = false
 local Islands = {
@@ -659,10 +659,47 @@ FishingTab:Input({
     end
 })
 
+FishingTab:Section({ Title = "其他" })
+
 FishingTab:Toggle({
     Title = "自动卖鱼",
     Value = false,
     Callback = function(state) _G.AutoSellEnabled = state end
+})
+
+MiscTab:Section({ Title = "功能" })
+
+MiscTab:Button({
+    Title = "换服",
+    Callback = function()
+        local TeleportService = game:GetService("TeleportService")
+        local HttpService = game:GetService("HttpService")
+        local PlaceId = game.PlaceId
+        local JobId = game.JobId
+        local url = "https://games.roblox.com/v1/games/" .. PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
+
+        local success, response = pcall(function()
+            return game:HttpGet(url)
+        end)
+        if success then
+            local data = HttpService:JSONDecode(response)
+            for _, server in ipairs(data.data) do
+                if server.playing < server.maxPlayers and server.id ~= JobId then
+                    TeleportService:TeleportToPlaceInstance(PlaceId, server.id, LocalPlayer)
+                    break
+                end
+            end
+        end
+    end
+})
+
+MiscTab:Button({
+    Title = "打开饵料制作",
+    Callback = function()
+        pcall(function()
+            Events.ChooseDialogueOption:FireServer("BuyBait", 2, "CraftBait", nil)
+        end)
+    end
 })
 
 MiscTab:Toggle({
@@ -676,6 +713,15 @@ MiscTab:Toggle({
     Value = false,
     Callback = function(state) _G.AutoFavoriteRareFish = state end
 })
+
+_G.AutoTeleToMerchant = false
+MiscTab:Toggle({
+    Title = "自动传送小道士",
+    Value = false,
+    Callback = function(state) _G.AutoTeleToMerchant = state end
+})
+
+MiscTab:Section({ Title = "任务相关" })
 
 MiscTab:Paragraph({
     Title = "注意事项",
@@ -700,6 +746,8 @@ MiscTab:Toggle({
     Value = false,
     Callback = function(state) _G.AutoBuyAncestralBait = state end
 })
+
+AFKTab:Section({ Title = "防踢设置" })
 
 local autoDeleteAFK = false
 AFKTab:Toggle({
@@ -729,6 +777,11 @@ AFKTab:Toggle({
                 return count
             end
             local initialCount = wipeAFK()
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "AFK 清理启动",
+                Text = "已删除 " .. initialCount .. " 个对象，后台持续监控中...",
+                Duration = 3
+            })
             task.spawn(function()
                 while autoDeleteAFK do
                     task.wait(1.5)
@@ -758,11 +811,7 @@ AFKTab:Toggle({
     end
 })
 
-MiscTab:Toggle({
-    Title = "自动传送小道士",
-    Value = false,
-    Callback = function(state) _G.AutoTeleToMerchant = state end
-})
+CharacterTab:Section({ Title = "移动加速" })
 
 local isSpeedEnabled = false
 local speedValue = 50
@@ -789,6 +838,8 @@ CharacterTab:Slider({
     end
 })
 
+FunTab:Section({ Title = "娱乐功能" })
+
 getgenv().AttachSpirit = false
 FunTab:Toggle({
     Title = "获取饮料的老婆",
@@ -808,6 +859,8 @@ RunService.Heartbeat:Connect(function()
         spirit:PivotTo(char.HumanoidRootPart.CFrame * CFrame.new(0, 5, 4))
     end
 end)
+
+TeleportTab:Section({ Title = "岛屿传送" })
 
 local function TeleportToCoords(coords)
     if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
