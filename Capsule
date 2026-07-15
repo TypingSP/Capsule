@@ -150,3 +150,7 @@ end)
 CreateButton("重型钓鱼", 4, function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/TypingSP/Capsule/main/%E9%87%8D%E5%9E%8B%E9%92%93%E9%B1%BC"))()
 end)
+
+CreateButton("鸡场", 5, function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/TypingSP/Capsule/main/%E9%B8%A1%E5%9C%BA"))()
+end)
