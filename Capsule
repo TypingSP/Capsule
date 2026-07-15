@@ -146,3 +146,7 @@ end)
 CreateButton("后街生存", 3, function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/TypingSP/Capsule/main/%E5%90%8E%E8%A1%97%E7%94%9F%E5%AD%98"))()
 end)
+
+CreateButton("重型钓鱼", 4, function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/TypingSP/Capsule/main/%E9%87%8D%E5%9E%8B%E9%92%93%E9%B1%BC"))()
+end)
