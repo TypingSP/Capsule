@@ -1,0 +1,628 @@
+local WindUI = loadstring(game:HttpGet(
+    "https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"
+))()
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local StarterGui = game:GetService("StarterGui")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+local MarketplaceService = game:GetService("MarketplaceService")
+
+local LocalPlayer = Players.LocalPlayer
+
+local Capsule = {
+    DeepPurple   = Color3.fromHex("#1A0A2E"),
+    MidPurple    = Color3.fromHex("#3D1A78"),
+    Purple       = Color3.fromHex("#7B2FF7"),
+    HotPink      = Color3.fromHex("#E8308A"),
+    Coral        = Color3.fromHex("#FF6B6B"),
+    WarmOrange   = Color3.fromHex("#F9A826"),
+    Gold         = Color3.fromHex("#FFD93D"),
+    Cyan         = Color3.fromHex("#00D2FF"),
+    SoftPink     = Color3.fromHex("#FFB6D9"),
+    Lavender     = Color3.fromHex("#C084FC"),
+    DarkBg       = Color3.fromHex("#0D0015"),
+    White        = Color3.fromHex("#FFFFFF"),
+}
+
+local function getPlaceName()
+    local ok, info = pcall(function()
+        return MarketplaceService:GetProductInfo(game.PlaceId)
+    end)
+    return (ok and info and info.Name) or game.Name
+end
+
+local placeName = getPlaceName()
+
+function gradient(text, startColor, endColor)
+    local result = ""
+    local chars = {}
+    for uchar in text:gmatch("[%z\1-\127\194-\244][\128-\191]*") do
+        table.insert(chars, uchar)
+    end
+    local length = #chars
+    for i = 1, length do
+        local t = (i - 1) / math.max(length - 1, 1)
+        local r = startColor.R + (endColor.R - startColor.R) * t
+        local g = startColor.G + (endColor.G - startColor.G) * t
+        local b = startColor.B + (endColor.B - startColor.B) * t
+        result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>',
+            math.floor(r * 255), math.floor(g * 255), math.floor(b * 255), chars[i])
+    end
+    return result
+end
+
+function gradient3(text, color1, color2, color3)
+    local result = ""
+    local chars = {}
+    for uchar in text:gmatch("[%z\1-\127\194-\244][\128-\191]*") do
+        table.insert(chars, uchar)
+    end
+    local length = #chars
+    for i = 1, length do
+        local t = (i - 1) / math.max(length - 1, 1)
+        local r, g, b
+        if t < 0.5 then
+            local s = t * 2
+            r = color1.R + (color2.R - color1.R) * s
+            g = color1.G + (color2.G - color1.G) * s
+            b = color1.B + (color2.B - color1.B) * s
+        else
+            local s = (t - 0.5) * 2
+            r = color2.R + (color3.R - color2.R) * s
+            g = color2.G + (color3.G - color2.G) * s
+            b = color2.B + (color3.B - color2.B) * s
+        end
+        result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>',
+            math.floor(r * 255), math.floor(g * 255), math.floor(b * 255), chars[i])
+    end
+    return result
+end
+
+local Window = WindUI:CreateWindow({
+    Title = gradient3("Capsule Sp", Capsule.DeepPurple, Capsule.HotPink, Capsule.WarmOrange),
+    Author = gradient3("Typing", Capsule.Cyan, Capsule.Purple, Capsule.HotPink),
+    Icon = "https://raw.githubusercontent.com/TypingSP/Capsule/main/1783909378391.png",
+    IconThemed = false,
+    Folder = "CloudHub",
+    Size = UDim2.fromOffset(320, 320),
+    Transparent = true,
+    Theme = "Dark",
+    SideBarWidth = 160,
+    HideSearchBar = false,
+    ScrollBarEnabled = true,
+    Background = "https://raw.githubusercontent.com/TypingSP/Capsule/main/share_1783905558267.jpeg",
+    BackgroundImageTransparency = 0.35,
+})
+
+Window:Tag({
+    Title = placeName,
+    Radius = 5,
+    Color = Capsule.Purple,
+})
+
+Window:EditOpenButton({
+    Title = "Capsule",
+    Icon = "https://raw.githubusercontent.com/TypingSP/Capsule/main/1783909378391.png",
+    CornerRadius = UDim.new(0, 8),
+    StrokeThickness = 2,
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Capsule.DeepPurple),
+        ColorSequenceKeypoint.new(0.25, Capsule.Purple),
+        ColorSequenceKeypoint.new(0.5, Capsule.HotPink),
+        ColorSequenceKeypoint.new(0.75, Capsule.WarmOrange),
+        ColorSequenceKeypoint.new(1, Capsule.DeepPurple),
+    }),
+    Draggable = true,
+})
+
+local borderEnabled = true
+local COLOR_SCHEMES = {
+    ["胶囊"] = {
+        type = "gradient",
+        colors = {
+            ColorSequenceKeypoint.new(0,    Capsule.DeepPurple),
+            ColorSequenceKeypoint.new(0.2,  Capsule.Purple),
+            ColorSequenceKeypoint.new(0.4,  Capsule.HotPink),
+            ColorSequenceKeypoint.new(0.6,  Capsule.WarmOrange),
+            ColorSequenceKeypoint.new(0.8,  Capsule.Cyan),
+            ColorSequenceKeypoint.new(1,    Capsule.DeepPurple),
+        }
+    }
+}
+local currentColorScheme = "胶囊"
+
+local function ensureBlurElement()
+    local mainFrame = Window.UIElements and Window.UIElements.Main
+    if not mainFrame then return end
+    local blur = mainFrame:FindFirstChild("Blur")
+    if not blur then
+        blur = Instance.new("ImageLabel")
+        blur.Name = "Blur"
+        blur.Size = UDim2.new(1, 0, 1, 0)
+        blur.Position = UDim2.new(0, 0, 0, 0)
+        blur.BackgroundTransparency = 1
+        blur.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+        blur.ImageTransparency = 0.15
+        blur.ZIndex = 0
+        blur.Parent = mainFrame
+    end
+    return blur
+end
+
+local function getColorSequenceForScheme(scheme)
+    local data = COLOR_SCHEMES[scheme]
+    if data.type == "gradient" then
+        return data.colors
+    end
+    return ColorSequence.new(Capsule.Purple)
+end
+
+local function applyBorderColor(c, colorSeq, e)
+    e = e or 0.15
+    local f = c.UIElements and c.UIElements.Main or c.Frame or c.Gui or c
+    if not f then return false end
+    local g = f:FindFirstChild("Blur", true)
+    if g and g:IsA("ImageLabel") then
+        g.ImageColor3 = Capsule.Purple
+        g.ImageTransparency = e
+        local existingGrad = g:FindFirstChild("CapsuleBorderGrad")
+        if not existingGrad then
+            existingGrad = Instance.new("UIGradient")
+            existingGrad.Name = "CapsuleBorderGrad"
+            existingGrad.Color = ColorSequence.new(colorSeq)
+            existingGrad.Rotation = 0
+            existingGrad.Parent = g
+        else
+            existingGrad.Color = ColorSequence.new(colorSeq)
+        end
+        return true
+    end
+    local h = f:FindFirstChild("Shadow", true)
+    if h and h:IsA("ImageLabel") then
+        h.ImageColor3 = Capsule.Purple
+        h.ImageTransparency = e
+        return true
+    end
+    return false
+end
+
+local borderConnection = nil
+local borderRotation = 0
+
+local function startBorderAnimation()
+    if borderConnection then
+        borderConnection:Disconnect()
+        borderConnection = nil
+    end
+    if not borderEnabled then return end
+    ensureBlurElement()
+    borderConnection = game:GetService("RunService").Heartbeat:Connect(function(delta)
+        local mainFrame = Window.UIElements and Window.UIElements.Main
+        if not mainFrame or not mainFrame.Visible then return end
+        borderRotation = (borderRotation + 25 * delta) % 360
+        local colorSeq = getColorSequenceForScheme(currentColorScheme)
+        applyBorderColor(Window, colorSeq, 0.15)
+        local blur = mainFrame:FindFirstChild("Blur", true)
+        if blur then
+            local grad = blur:FindFirstChild("CapsuleBorderGrad")
+            if grad then
+                grad.Rotation = borderRotation
+            end
+        end
+    end)
+end
+
+local function stopBorderAnimation()
+    if borderConnection then
+        borderConnection:Disconnect()
+        borderConnection = nil
+    end
+end
+
+local function setupVisibilityListener()
+    local mainFrame = Window.UIElements and Window.UIElements.Main
+    if not mainFrame then
+        task.spawn(function()
+            repeat task.wait() until Window.UIElements and Window.UIElements.Main
+            setupVisibilityListener()
+        end)
+        return
+    end
+    if mainFrame.Visible and borderEnabled then
+        startBorderAnimation()
+    elseif not mainFrame.Visible then
+        stopBorderAnimation()
+    end
+    mainFrame:GetPropertyChangedSignal("Visible"):Connect(function()
+        if mainFrame.Visible and borderEnabled then
+            startBorderAnimation()
+        else
+            stopBorderAnimation()
+        end
+    end)
+end
+
+setupVisibilityListener()
+Window:OnClose(function()
+    stopBorderAnimation()
+end)
+
+task.spawn(function()
+    repeat task.wait() until Window.UIElements and Window.UIElements.Main
+    local mainContainer = Window.UIElements.Main
+    if mainContainer then
+        local stroke = Instance.new("UIStroke")
+        stroke.Name = "CapsuleStroke"
+        stroke.Thickness = 2
+        stroke.Color = Capsule.Purple
+        stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        stroke.Transparency = 0.3
+        local gradientElement = Instance.new("UIGradient")
+        gradientElement.Name = "CapsuleGradient"
+        gradientElement.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0,    Capsule.DeepPurple),
+            ColorSequenceKeypoint.new(0.17, Capsule.Purple),
+            ColorSequenceKeypoint.new(0.33, Capsule.HotPink),
+            ColorSequenceKeypoint.new(0.5,  Capsule.WarmOrange),
+            ColorSequenceKeypoint.new(0.67, Capsule.Cyan),
+            ColorSequenceKeypoint.new(0.83, Capsule.Lavender),
+            ColorSequenceKeypoint.new(1,    Capsule.DeepPurple),
+        })
+        gradientElement.Enabled = true
+        gradientElement.Offset = Vector2.new(0, 0)
+        stroke.Parent = mainContainer
+        gradientElement.Parent = stroke
+        task.spawn(function()
+            local rotationSpeed = 30
+            while mainContainer and mainContainer.Parent do
+                task.wait(0.05)
+                gradientElement.Rotation = (gradientElement.Rotation + rotationSpeed * 0.05) % 360
+            end
+        end)
+    end
+end)
+
+task.spawn(function()
+    repeat
+        task.wait(0.1)
+    until Window.OpenButtonMain and Window.OpenButtonMain.Button
+    local button = Window.OpenButtonMain.Button
+    local stroke = button:FindFirstChildWhichIsA("UIStroke")
+    if stroke then
+        repeat
+            task.wait(0.05)
+        until stroke:FindFirstChildWhichIsA("UIGradient")
+        local grad = stroke:FindFirstChildWhichIsA("UIGradient")
+        if grad then
+            grad.Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0,    Capsule.DeepPurple),
+                ColorSequenceKeypoint.new(0.2,  Capsule.Purple),
+                ColorSequenceKeypoint.new(0.4,  Capsule.HotPink),
+                ColorSequenceKeypoint.new(0.6,  Capsule.WarmOrange),
+                ColorSequenceKeypoint.new(0.8,  Capsule.Cyan),
+                ColorSequenceKeypoint.new(1,    Capsule.DeepPurple),
+            })
+            game:GetService("RunService").Heartbeat:Connect(function()
+                if grad and grad.Parent then
+                    grad.Rotation = (tick() * 50) % 360
+                end
+            end)
+        end
+    end
+end)
+
+task.spawn(function()
+    repeat task.wait() until Window.UIElements and Window.UIElements.Main
+    local mainFrame = Window.UIElements.Main
+    if mainFrame then
+        local topGlow = Instance.new("Frame")
+        topGlow.Name = "TopGlow"
+        topGlow.Size = UDim2.new(1, 0, 0.3, 0)
+        topGlow.Position = UDim2.new(0, 0, 0, 0)
+        topGlow.BackgroundTransparency = 1
+        topGlow.ZIndex = 0
+        topGlow.Parent = mainFrame
+        local topGrad = Instance.new("UIGradient")
+        topGrad.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.new(0.48, 0.18, 0.96)),
+            ColorSequenceKeypoint.new(0.5, Color3.new(0.91, 0.19, 0.54)),
+            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 0)),
+        })
+        topGrad.Transparency = NumberSequence.new({
+            NumberSequenceKeypoint.new(0, 0.75),
+            NumberSequenceKeypoint.new(0.5, 0.88),
+            NumberSequenceKeypoint.new(1, 1),
+        })
+        topGrad.Rotation = 90
+        topGrad.Parent = topGlow
+        local bottomGlow = Instance.new("Frame")
+        bottomGlow.Name = "BottomGlow"
+        bottomGlow.Size = UDim2.new(1, 0, 0.25, 0)
+        bottomGlow.Position = UDim2.new(0, 0, 0.75, 0)
+        bottomGlow.BackgroundTransparency = 1
+        bottomGlow.ZIndex = 0
+        bottomGlow.Parent = mainFrame
+        local bottomGrad = Instance.new("UIGradient")
+        bottomGrad.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.new(0, 0, 0)),
+            ColorSequenceKeypoint.new(0.4, Color3.new(0.98, 0.66, 0.15)),
+            ColorSequenceKeypoint.new(1, Color3.new(0.18, 0.82, 1)),
+        })
+        bottomGrad.Transparency = NumberSequence.new({
+            NumberSequenceKeypoint.new(0, 1),
+            NumberSequenceKeypoint.new(0.5, 0.85),
+            NumberSequenceKeypoint.new(1, 0.92),
+        })
+        bottomGrad.Rotation = 90
+        bottomGrad.Parent = bottomGlow
+    end
+end)
+
+local AutoDepositEggs = false
+local AutoCollectCash = false
+local AutoCollectEggs = false
+local AutoBuyChickens = false
+local AutoMergeChickens = false
+local FloatEnabled = false
+local FlingAllEnabled = false
+local InfJumpEnabled = false
+
+local DepositEggsConnection = nil
+local CollectCashConnection = nil
+local CollectEggsConnection = nil
+local BuyChickensConnection = nil
+local MergeChickensConnection = nil
+local FloatForce = nil
+local InfJumpConnection = nil
+local FlingAllThread = nil
+
+local remoteFunction = ReplicatedStorage:WaitForChild("Paper"):WaitForChild("Remotes"):WaitForChild("__remotefunction")
+
+local function notify(title, content)
+    pcall(function()
+        StarterGui:SetCore("SendNotification", {
+            Title = title,
+            Text = content or "",
+            Duration = 4,
+        })
+    end)
+end
+
+local function invokeRemote(action, ...)
+    local success, result = pcall(function(...)
+        return remoteFunction:InvokeServer(action, ...)
+    end, ...)
+    if not success then
+        notify("触发失败", tostring(result))
+    end
+    return success, result
+end
+
+local function collectWorkspaceEggs()
+    local eggs = workspace:FindFirstChild("Eggs")
+    if not eggs then return end
+    local character = LocalPlayer.Character
+    if not character then return end
+    local hrp = character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+    for _, egg in pairs(eggs:GetChildren()) do
+        if egg:IsA("Model") or egg:IsA("BasePart") then
+            pcall(function()
+                if egg:IsA("BasePart") then
+                    egg.CFrame = hrp.CFrame
+                else
+                    egg:PivotTo(hrp.CFrame)
+                end
+            end)
+        end
+    end
+end
+
+notify("加载完成", "鸡场已加载")
+
+local MainTab = Window:Tab({ Title = "自动", Icon = "solar:play-circle-bold" })
+local CharacterTab = Window:Tab({ Title = "人物", Icon = "solar:user-bold" })
+
+MainTab:Toggle({
+    Title = "自动存放鸡蛋",
+    Value = false,
+    Callback = function(value)
+        AutoDepositEggs = value
+        if value then
+            DepositEggsConnection = RunService.Heartbeat:Connect(function()
+                if AutoDepositEggs then
+                    invokeRemote("Deposit Eggs")
+                end
+            end)
+        elseif DepositEggsConnection then
+            DepositEggsConnection:Disconnect()
+            DepositEggsConnection = nil
+        end
+    end,
+})
+
+MainTab:Toggle({
+    Title = "自动领取钱",
+    Value = false,
+    Callback = function(value)
+        AutoCollectCash = value
+        if value then
+            CollectCashConnection = RunService.Heartbeat:Connect(function()
+                if AutoCollectCash then
+                    invokeRemote("Collect Cash")
+                end
+            end)
+        elseif CollectCashConnection then
+            CollectCashConnection:Disconnect()
+            CollectCashConnection = nil
+        end
+    end,
+})
+
+MainTab:Toggle({
+    Title = "自动收集鸡蛋",
+    Value = false,
+    Callback = function(value)
+        AutoCollectEggs = value
+        if value then
+            CollectEggsConnection = RunService.Heartbeat:Connect(function()
+                if AutoCollectEggs then
+                    collectWorkspaceEggs()
+                end
+            end)
+        elseif CollectEggsConnection then
+            CollectEggsConnection:Disconnect()
+            CollectEggsConnection = nil
+        end
+    end,
+})
+
+MainTab:Toggle({
+    Title = "自动购买鸡",
+    Value = false,
+    Callback = function(value)
+        AutoBuyChickens = value
+        if value then
+            BuyChickensConnection = RunService.Heartbeat:Connect(function()
+                if AutoBuyChickens then
+                    invokeRemote("Buy Chickens", 1)
+                end
+            end)
+        elseif BuyChickensConnection then
+            BuyChickensConnection:Disconnect()
+            BuyChickensConnection = nil
+        end
+    end,
+})
+
+MainTab:Toggle({
+    Title = "自动合并鸡",
+    Value = false,
+    Callback = function(value)
+        AutoMergeChickens = value
+        if value then
+            MergeChickensConnection = RunService.Heartbeat:Connect(function()
+                if AutoMergeChickens then
+                    invokeRemote("Merge Chickens")
+                end
+            end)
+        elseif MergeChickensConnection then
+            MergeChickensConnection:Disconnect()
+            MergeChickensConnection = nil
+        end
+    end,
+})
+
+CharacterTab:Toggle({
+    Title = "漂浮",
+    Value = false,
+    Callback = function(value)
+        FloatEnabled = value
+        local char = LocalPlayer.Character
+        local hrp = char and char:FindFirstChild("HumanoidRootPart")
+        if FloatEnabled and hrp then
+            if FloatForce then FloatForce:Destroy() end
+            FloatForce = Instance.new("BodyVelocity")
+            FloatForce.Name = "FloatVelocity"
+            FloatForce.MaxForce = Vector3.new(0, 100000, 0)
+            FloatForce.Velocity = Vector3.new(0, 0, 0)
+            FloatForce.Parent = hrp
+        else
+            if FloatForce then
+                FloatForce:Destroy()
+                FloatForce = nil
+            end
+        end
+    end,
+})
+
+CharacterTab:Toggle({
+    Title = "击飞所有",
+    Value = false,
+    Callback = function(value)
+        FlingAllEnabled = value
+        if value then
+            if FlingAllThread then return end
+            FlingAllThread = task.spawn(function()
+                local char = LocalPlayer.Character
+                local hrp = char and char:FindFirstChild("HumanoidRootPart")
+                local hum = char and char:FindFirstChildOfClass("Humanoid")
+                if hrp and hum then
+                    hum.PlatformStand = true
+                    local spinForce = Instance.new("BodyAngularVelocity")
+                    spinForce.Name = "TrollSpin"
+                    spinForce.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+                    spinForce.AngularVelocity = Vector3.new(0, 50000, 0)
+                    spinForce.Parent = hrp
+                    while FlingAllEnabled do
+                        for _, targetPlayer in pairs(Players:GetPlayers()) do
+                            if targetPlayer ~= LocalPlayer and FlingAllEnabled then
+                                local targetChar = targetPlayer.Character
+                                local targetHrp = targetChar and targetChar:FindFirstChild("HumanoidRootPart")
+                                if targetHrp then
+                                    local timer = tick()
+                                    while FlingAllEnabled and tick() - timer < 0.2 and targetHrp.Parent do
+                                        hrp.CFrame = targetHrp.CFrame
+                                        hrp.Velocity = Vector3.new(math.random(-5000, 5000), 5000, math.random(-5000, 5000))
+                                        task.wait(0.01)
+                                    end
+                                end
+                            end
+                        end
+                        task.wait()
+                    end
+                    if hrp:FindFirstChild("TrollSpin") then hrp.TrollSpin:Destroy() end
+                    hrp.Velocity = Vector3.new(0, 0, 0)
+                    hum.PlatformStand = false
+                end
+                FlingAllThread = nil
+            end)
+        else
+            if FlingAllThread then
+                repeat task.wait() until FlingAllThread == nil
+            end
+        end
+    end,
+})
+
+CharacterTab:Toggle({
+    Title = "无限跳",
+    Value = false,
+    Callback = function(value)
+        InfJumpEnabled = value
+        if InfJumpEnabled then
+            if not InfJumpConnection then
+                InfJumpConnection = UserInputService.JumpRequest:Connect(function()
+                    local char = LocalPlayer.Character
+                    local hum = char and char:FindFirstChildOfClass("Humanoid")
+                    if hum then hum:ChangeState(Enum.HumanoidStateType.Jumping) end
+                end)
+            end
+        else
+            if InfJumpConnection then
+                InfJumpConnection:Disconnect()
+                InfJumpConnection = nil
+            end
+        end
+    end,
+})
+
+CharacterTab:Button({
+    Title = "克隆幻象",
+    Callback = function()
+        local char = LocalPlayer.Character
+        if char then
+            char.Archivable = true
+            local clone = char:Clone()
+            clone.Parent = Workspace
+            for _, v in pairs(clone:GetDescendants()) do
+                if v:IsA("Script") or v:IsA("LocalScript") then
+                    v:Destroy()
+                end
+            end
+        end
+    end,
+})
